@@ -1,9 +1,4 @@
 {
-  "env": {
-    "ANTHROPIC_AUTH_TOKEN": "$ANTHROPIC_AUTH_TOKEN",
-    "ANTHROPIC_BASE_URL": "${ANTHROPIC_BASE_URL:-https://coding.dashscope.aliyuncs.com/apps/anthropic}",
-    "ANTHROPIC_MODEL": "${ANTHROPIC_MODEL:-kimi-k2.5}"
-  },
   "permissions": {
     "allow": [
       "*",
@@ -20,5 +15,107 @@
       "mcp__ide",
       "Skill"
     ]
+  },
+  "skills": {
+    "element-plus-vue3": {
+      "source": ".agents/skills/element-plus-vue3",
+      "sourceType": "local"
+    },
+    "create-adaptable-composable": {
+      "source": ".agents/skills/create-adaptable-composable",
+      "sourceType": "local"
+    },
+    "vue-best-practices": {
+      "source": ".agents/skills/vue-best-practices",
+      "sourceType": "local"
+    },
+    "vue-jsx-best-practices": {
+      "source": ".agents/skills/vue-jsx-best-practices",
+      "sourceType": "local"
+    },
+    "vue-options-api-best-practices": {
+      "source": ".agents/skills/vue-options-api-best-practices",
+      "sourceType": "local"
+    },
+    "vue-pinia-best-practices": {
+      "source": ".agents/skills/vue-pinia-best-practices",
+      "sourceType": "local"
+    },
+    "vue-router-best-practices": {
+      "source": ".agents/skills/vue-router-best-practices",
+      "sourceType": "local"
+    },
+    "vue-testing-best-practices": {
+      "source": ".agents/skills/vue-testing-best-practices",
+      "sourceType": "local"
+    },
+    "vue-debug-guides": {
+      "source": ".agents/skills/vue-debug-guides",
+      "sourceType": "local"
+    },
+    "typescript-advanced-types": {
+      "source": ".agents/skills/typescript-advanced-types",
+      "sourceType": "local"
+    },
+    "tailwind-design-system": {
+      "source": ".agents/skills/tailwind-design-system",
+      "sourceType": "local"
+    },
+    "vitest": {
+      "source": ".agents/skills/vitest",
+      "sourceType": "local"
+    },
+    "api-testing-observability-api-mock": {
+      "source": ".agents/skills/api-testing-observability-api-mock",
+      "sourceType": "local"
+    },
+    "performance": {
+      "source": ".agents/skills/performance",
+      "sourceType": "local"
+    },
+    "layer1-document-capture": {
+      "source": ".agents/skills/layer1-document-capture",
+      "sourceType": "local"
+    },
+    "layer2-requirement-analysis": {
+      "source": ".agents/skills/layer2-requirement-analysis",
+      "sourceType": "local"
+    },
+    "layer3-contract-definition": {
+      "source": ".agents/skills/layer3-contract-definition",
+      "sourceType": "local"
+    },
+    "layer4-red-tests": {
+      "source": ".agents/skills/layer4-red-tests",
+      "sourceType": "local"
+    },
+    "layer5-green-implementation": {
+      "source": ".agents/skills/layer5-green-implementation",
+      "sourceType": "local"
+    },
+    "layer6-delivery": {
+      "source": ".agents/skills/layer6-delivery",
+      "sourceType": "local"
+    },
+    "layer7-knowledge-accumulation": {
+      "source": ".agents/skills/layer7-knowledge-accumulation",
+      "sourceType": "local"
+    },
+    "pencil-json-parser": {
+      "source": ".agents/skills/pencil-json-parser",
+      "sourceType": "local"
+    },
+    "pencil-to-vue": {
+      "source": ".agents/skills/pencil-to-vue",
+      "sourceType": "local"
+    },
+    "pencil-to-tailwind": {
+      "source": ".agents/skills/pencil-to-tailwind",
+      "sourceType": "local"
+    },
+    "visual-regression-testing": {
+      "source": ".agents/skills/visual-regression-testing",
+      "sourceType": "local"
+    }
   }
 }

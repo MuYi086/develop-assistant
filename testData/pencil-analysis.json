@@ -1,0 +1,398 @@
+{
+  "summary": {
+    "version": "2.8",
+    "pageCount": 1,
+    "totalElements": 604,
+    "components": {
+      "frames": 139,
+      "rectangles": 96,
+      "texts": 179,
+      "groups": 110,
+      "images": 0,
+      "paths": 65
+    }
+  },
+  "pages": [
+    {
+      "id": "kiXjX",
+      "name": "点餐+已加购提示",
+      "dimensions": {
+        "width": 1280,
+        "height": 800
+      },
+      "elementCount": 604
+    }
+  ],
+  "designTokens": {
+    "colors": [
+      "#ebebeb",
+      "#202020",
+      "#ffffff",
+      "#000000",
+      "#222222",
+      "#ffe9e8",
+      "#e80c00",
+      "#e8e8ff",
+      "#6367ff",
+      "#999999",
+      "#00a384",
+      "#f5f8f8",
+      "#f1f1f1",
+      "#444444",
+      "#f4f4f4",
+      "#d7d7d7",
+      "#d6f0eb",
+      "#ffe866",
+      "#d9d9d9",
+      "#beede4",
+      "#a0a0a0",
+      "#aaaaaa",
+      "#cccccc"
+    ],
+    "fontSizes": [
+      8,
+      12,
+      14,
+      15,
+      16,
+      18,
+      20
+    ],
+    "fontFamilies": [
+      "MiSans"
+    ]
+  },
+  "tailwindConfig": {
+    "theme": {
+      "extend": {
+        "colors": {
+          "primary-bg": "#202020",
+          "danger": "#e80c00",
+          "accent": "#6367ff"
+        },
+        "fontFamily": {
+          "sans": "MiSans"
+        }
+      }
+    }
+  },
+  "elementMappings": [
+    {
+      "id": "WQd75",
+      "type": "rectangle",
+      "name": "Rectangle 1295",
+      "depth": 1,
+      "x": 0,
+      "y": 0,
+      "width": 1280,
+      "height": 800,
+      "fill": "#202020",
+      "vueComponent": "div",
+      "elementPlusComponent": null,
+      "tailwindClasses": [
+        "bg-gray-900"
+      ]
+    },
+    {
+      "id": "Pgm1x",
+      "type": "group",
+      "name": "Group 2987",
+      "depth": 1,
+      "x": 80,
+      "y": 40,
+      "fill": null,
+      "vueComponent": "div",
+      "elementPlusComponent": null,
+      "tailwindClasses": []
+    },
+    {
+      "id": "FXR9G",
+      "type": "frame",
+      "name": "Frame 4050",
+      "depth": 2,
+      "x": 170,
+      "y": 0,
+      "width": 704,
+      "height": 698,
+      "fill": null,
+      "layout": "vertical",
+      "gap": 6,
+      "vueComponent": "div",
+      "elementPlusComponent": null,
+      "tailwindClasses": [
+        "flex",
+        "flex-col",
+        "gap-1.5"
+      ]
+    },
+    {
+      "id": "lWvgY",
+      "type": "frame",
+      "name": "Frame 2820",
+      "depth": 3,
+      "width": "fill_container",
+      "fill": null,
+      "gap": 6,
+      "vueComponent": "div",
+      "elementPlusComponent": null,
+      "tailwindClasses": [
+        "gap-1.5"
+      ]
+    },
+    {
+      "id": "VVnYX",
+      "type": "group",
+      "name": "Group 2823",
+      "depth": 4,
+      "fill": null,
+      "vueComponent": "div",
+      "elementPlusComponent": null,
+      "tailwindClasses": []
+    },
+    {
+      "id": "4l11l",
+      "type": "rectangle",
+      "name": "Rectangle 1296",
+      "depth": 5,
+      "x": 0,
+      "y": 0,
+      "width": 136,
+      "height": 122,
+      "fill": "#ffffff",
+      "cornerRadius": 8,
+      "vueComponent": "div",
+      "elementPlusComponent": null,
+      "tailwindClasses": [
+        "rounded-lg",
+        "bg-white"
+      ]
+    },
+    {
+      "id": "gtqHB",
+      "type": "rectangle",
+      "name": "1 93",
+      "depth": 5,
+      "x": 0,
+      "y": 0,
+      "width": 136,
+      "height": 86,
+      "fill": null,
+      "cornerRadius": [
+        8,
+        8,
+        0,
+        0
+      ],
+      "vueComponent": "div",
+      "elementPlusComponent": null,
+      "tailwindClasses": [
+        "rounded-lg"
+      ]
+    },
+    {
+      "id": "OpF4E",
+      "type": "group",
+      "name": "价格",
+      "depth": 5,
+      "x": 94,
+      "y": 66,
+      "fill": null,
+      "vueComponent": "div",
+      "elementPlusComponent": null,
+      "tailwindClasses": []
+    },
+    {
+      "id": "rVAM7",
+      "type": "path",
+      "name": "Rectangle 1593",
+      "depth": 6,
+      "x": 0,
+      "y": 0,
+      "width": 42,
+      "height": 20,
+      "fill": "#000000",
+      "vueComponent": "div",
+      "elementPlusComponent": null,
+      "tailwindClasses": []
+    },
+    {
+      "id": "E7bAQ",
+      "type": "text",
+      "name": "￥25.8",
+      "depth": 6,
+      "x": 2,
+      "y": 2,
+      "fill": "#ffffff",
+      "fontSize": 12,
+      "fontFamily": "MiSans",
+      "content": "￥25.8",
+      "vueComponent": "span",
+      "elementPlusComponent": null,
+      "tailwindClasses": [
+        "text-xs",
+        "bg-white"
+      ]
+    },
+    {
+      "id": "C3Wo9",
+      "type": "text",
+      "name": "爽脆榨菜肉丝",
+      "depth": 5,
+      "x": 6,
+      "y": 92,
+      "fill": "#222222",
+      "fontSize": 15,
+      "fontFamily": "MiSans",
+      "content": "爽脆榨菜肉丝",
+      "vueComponent": "span",
+      "elementPlusComponent": null,
+      "tailwindClasses": [
+        "text-base"
+      ]
+    },
+    {
+      "id": "QD6sF",
+      "type": "frame",
+      "name": "标签-售罄",
+      "depth": 5,
+      "x": 6,
+      "y": 6,
+      "width": 44,
+      "height": 20,
+      "fill": "#ffe9e8",
+      "gap": 10,
+      "cornerRadius": 4,
+      "vueComponent": "div",
+      "elementPlusComponent": null,
+      "tailwindClasses": [
+        "gap-2.5"
+      ]
+    },
+    {
+      "id": "Vj5Rp",
+      "type": "text",
+      "name": "已售罄",
+      "depth": 6,
+      "fill": "#e80c00",
+      "fontSize": 12,
+      "fontFamily": "MiSans",
+      "content": "已售罄",
+      "vueComponent": "span",
+      "elementPlusComponent": null,
+      "tailwindClasses": [
+        "text-xs",
+        "bg-red-500"
+      ]
+    },
+    {
+      "id": "FLk3s",
+      "type": "frame",
+      "name": "标签-套餐",
+      "depth": 5,
+      "x": 6,
+      "y": 60,
+      "width": 32,
+      "height": 20,
+      "fill": "#e8e8ff",
+      "gap": 10,
+      "cornerRadius": 4,
+      "vueComponent": "div",
+      "elementPlusComponent": null,
+      "tailwindClasses": [
+        "gap-2.5"
+      ]
+    },
+    {
+      "id": "NMefL",
+      "type": "text",
+      "name": "套餐",
+      "depth": 6,
+      "fill": "#6367ff",
+      "fontSize": 12,
+      "fontFamily": "MiSans",
+      "content": "套餐",
+      "vueComponent": "span",
+      "elementPlusComponent": null,
+      "tailwindClasses": [
+        "text-xs",
+        "bg-indigo-500"
+      ]
+    },
+    {
+      "id": "iRPya",
+      "type": "group",
+      "name": "Group 2824",
+      "depth": 4,
+      "fill": null,
+      "vueComponent": "div",
+      "elementPlusComponent": null,
+      "tailwindClasses": []
+    },
+    {
+      "id": "jllxZ",
+      "type": "rectangle",
+      "name": "Rectangle 1296",
+      "depth": 5,
+      "x": 0,
+      "y": 0,
+      "width": 136,
+      "height": 122,
+      "fill": "#ffffff",
+      "cornerRadius": 8,
+      "vueComponent": "div",
+      "elementPlusComponent": null,
+      "tailwindClasses": [
+        "rounded-lg",
+        "bg-white"
+      ]
+    },
+    {
+      "id": "ibkrX",
+      "type": "rectangle",
+      "name": "2 900",
+      "depth": 5,
+      "x": 0,
+      "y": 0,
+      "width": 136,
+      "height": 86,
+      "fill": null,
+      "cornerRadius": [
+        8,
+        8,
+        0,
+        0
+      ],
+      "vueComponent": "div",
+      "elementPlusComponent": null,
+      "tailwindClasses": [
+        "rounded-lg"
+      ]
+    },
+    {
+      "id": "jv4yp",
+      "type": "group",
+      "name": "价格",
+      "depth": 5,
+      "x": 94,
+      "y": 66,
+      "fill": null,
+      "vueComponent": "div",
+      "elementPlusComponent": null,
+      "tailwindClasses": []
+    },
+    {
+      "id": "QkKkd",
+      "type": "path",
+      "name": "Rectangle 1593",
+      "depth": 6,
+      "x": 0,
+      "y": 0,
+      "width": 42,
+      "height": 20,
+      "fill": "#000000",
+      "vueComponent": "div",
+      "elementPlusComponent": null,
+      "tailwindClasses": []
+    }
+  ]
+}
