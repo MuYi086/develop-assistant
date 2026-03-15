@@ -74,7 +74,7 @@ show_help() {
     echo "  $0 --help           - 显示此帮助"
     echo ""
     echo "可用别名:"
-    echo "  claude-ai           - 启动带辅助项目的Claude"
+    echo "  claude-ai           - 启动带辅助项目的Claude（自动同步skills）"
     echo "  claude-ai-dev       - 详细模式启动"
 }
 
@@ -91,7 +91,7 @@ case "${1:-}" in
         alias claude-ai='$HOME/develop-assistant/scripts/claude-ai.sh'
         alias claude-ai-dev='$HOME/develop-assistant/scripts/claude-ai.sh --verbose'
         echo "Claude AI别名已设置:"
-        echo "  claude-ai     -> 启动带辅助项目的Claude"
+        echo "  claude-ai     -> 启动带辅助项目的Claude（自动同步skills）"
         echo "  claude-ai-dev -> 详细模式启动"
         echo ""
         echo "提示: 使用 'source $0 --install' 永久添加别名"

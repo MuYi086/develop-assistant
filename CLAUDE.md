@@ -29,8 +29,8 @@ Layer 6: 交付 → Layer 7: 知识沉淀
 ### 执行命令
 
 ```bash
-# 启动带辅助项目的Claude
-claude --add-dir ~/develop-assistant
+# 启动带辅助项目的Claude（自动同步skills到全局目录）
+claude-ai
 
 # 各层执行（在业务项目目录内）
 /skill layer1-document-capture    # Layer 1
@@ -41,6 +41,8 @@ claude --add-dir ~/develop-assistant
 /skill layer6-delivery             # Layer 6
 /skill layer7-knowledge-accumulation # Layer 7
 ```
+
+> **提示**: `claude-ai` 命令会自动将 develop-assistant 的 skills 同步到 `~/.claude/skills/`，确保在任何项目中都能使用 `/skill` 命令。
 
 ---
 
@@ -230,12 +232,22 @@ claude-ai
 
 ### Skills未加载
 
-```bash
-# 检查skills是否正确注册
-/skills list
+**问题**: 运行 `/skills list` 显示 "No skills found"
 
-# 检查settings.json路径
-cat ~/develop-assistant/.claude/settings.json
+**原因**: `--add-dir` 不会自动加载 develop-assistant 的 skills，skills 必须位于 `~/.claude/skills/` 或业务项目的 `.claude/skills/` 目录下。
+
+**解决方案**:
+
+```bash
+# 使用 claude-ai 启动器（推荐）- 自动同步 skills
+~/develop-assistant/scripts/claude-ai.sh
+
+# 或手动同步 skills 到全局目录
+mkdir -p ~/.claude/skills
+cp -r ~/develop-assistant/.agents/skills/* ~/.claude/skills/
+
+# 验证
+/skills list
 ```
 
 ### 通知不弹窗
