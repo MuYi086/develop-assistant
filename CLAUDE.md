@@ -128,19 +128,42 @@ echo -e "\033]1337;SetNotification=AI任务已完成\007"
 
 ### 本地私有原则
 
-1. **`.ai/` 目录不提交到Git** - 添加到 `.gitignore`
-2. **辅助项目本身也不Push** - 本地维护，团队共享方式待定
+1. **`.ai/` 目录不提交到公司项目Git** - 业务项目的 `.gitignore` 添加 `.ai/`
+2. **develop-assistant 本身是私有Git仓库** - 多设备同步 `.ai/` + skills
 3. **敏感信息不出本地** - PRD/API文档仅在本地处理
+
+### 多设备同步方案
+
+**仓库**: `git@github.com:MuYi086/develop-assistant.git`（私有）
+
+```bash
+# ===== 公司电脑（已配置完成）=====
+# 日常同步
+~/develop-assistant/scripts/sync.sh
+
+# ===== 家里电脑（首次配置）=====
+# 1. 克隆仓库
+git clone git@github.com:MuYi086/develop-assistant.git ~/develop-assistant
+
+# 2. 配置别名
+echo 'alias claude-ai="\$HOME/develop-assistant/scripts/claude-ai.sh"' >> ~/.bashrc
+source ~/.bashrc
+
+# 3. 同步技能
+claude-ai --help  # 首次运行会自动同步 skills
+
+# 日常同步
+~/develop-assistant/scripts/sync.sh pull  # 拉取公司电脑的更新
+```
 
 ### 协作方式
 
 ```bash
 # 方案1：本地目录引入（推荐）
-claude --add-dir ~/develop-assistant
-
-# 方案2：Shell别名（配置一次）
-alias claude-ai='claude --add-dir ~/develop-assistant'
 claude-ai
+
+# 方案2：直接运行脚本
+~/develop-assistant/scripts/claude-ai.sh
 ```
 
 ---
