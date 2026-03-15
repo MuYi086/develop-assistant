@@ -139,7 +139,10 @@ echo -e "\033]1337;SetNotification=AI任务已完成\007"
 ```bash
 # ===== 公司电脑（已配置完成）=====
 # 日常同步
-~/develop-assistant/scripts/sync.sh
+cd ~/develop-assistant
+git add .
+git commit -m "update: 描述你的变更"
+git push
 
 # ===== 家里电脑（首次配置）=====
 # 1. 克隆仓库
@@ -153,7 +156,8 @@ source ~/.bashrc
 claude-ai --help  # 首次运行会自动同步 skills
 
 # 日常同步
-~/develop-assistant/scripts/sync.sh pull  # 拉取公司电脑的更新
+cd ~/develop-assistant
+git pull  # 拉取公司电脑的更新
 ```
 
 ### 协作方式
