@@ -1,0 +1,23 @@
+{
+  "name": "develop-assistant",
+  "version": "1.0.0",
+  "description": "开发助手",
+  "homepage": "https://github.com/MuYi086/develop-assistant#readme",
+  "bugs": {
+    "url": "https://github.com/MuYi086/develop-assistant/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MuYi086/develop-assistant.git"
+  },
+  "license": "MIT",
+  "author": "muyi086",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "skills": "^1.4.5"
+  }
+}
