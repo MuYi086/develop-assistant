@@ -102,9 +102,9 @@ function dev-assist { Set-Location $env:USERPROFILE\develop-assistant }
 
 ```bash
 # Git Bash 可以使用 Linux 风格的别名
-echo 'alias claude-ai="claude --add-dir \$HOME/develop-assistant"' >> ~/.bashrc
-echo 'alias claude-ai-dev="claude --add-dir \$HOME/develop-assistant --verbose"' >> ~/.bashrc
-echo 'alias dev-assist="cd \$HOME/develop-assistant"' >> ~/.bashrc
+echo 'alias claude-ai="claude --add-dir /d/github/develop-assistant"' >> ~/.bashrc
+echo 'alias claude-ai-dev="claude --add-dir /d/github/develop-assistant --verbose"' >> ~/.bashrc
+echo 'alias dev-assist="cd /d/github/develop-assistant"' >> ~/.bashrc
 source ~/.bashrc
 ```
 

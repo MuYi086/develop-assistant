@@ -1,89 +1,111 @@
 @echo off
 chcp 65001 >nul
-REM =============================================================================
-REM Claude AI 启动脚本 (Windows版本) - 带前端Vibe Coding辅助项目
-REM =============================================================================
-
 setlocal EnableDelayedExpansion
 
-REM 获取辅助项目目录
 set "SCRIPT_DIR=%~dp0"
 set "SCRIPT_DIR=%SCRIPT_DIR:~0,-1%"
 for %%I in ("%SCRIPT_DIR%") do set "DEVELOP_ASSISTANT_DIR=%%~dpI"
 set "DEVELOP_ASSISTANT_DIR=%DEVELOP_ASSISTANT_DIR:~0,-1%"
 
-echo.
 echo ═══════════════════════════════════════════════════════════
-echo  启动 Claude with Vibe Coding Assistant
+echo  Claude with Vibe Coding Assistant
 echo ═══════════════════════════════════════════════════════════
 echo.
 
-REM =========================== Skills 同步 ===========================
-
+REM Skills 同步
 set "GLOBAL_SKILLS_DIR=%USERPROFILE%\.claude\skills"
 set "SOURCE_SKILLS_DIR=%DEVELOP_ASSISTANT_DIR%\.agents\skills"
 
-REM 检查源目录
+echo [DEBUG] USERPROFILE=%USERPROFILE%
+echo [DEBUG] GLOBAL_SKILLS_DIR=%GLOBAL_SKILLS_DIR%
+echo [DEBUG] SOURCE_SKILLS_DIR=%SOURCE_SKILLS_DIR%
+echo [DEBUG] Current Dir=%CD%
+echo.
+
 if not exist "%SOURCE_SKILLS_DIR%" (
-    echo ⚠️  Skills 源目录不存在: %SOURCE_SKILLS_DIR%
+    echo [DEBUG] Source dir not exist
+echo.
     goto :SKIP_SKILLS
 )
 
-REM 创建目标目录（如果不存在）
-if not exist "%GLOBAL_SKILLS_DIR%" (
-    mkdir "%GLOBAL_SKILLS_DIR%" 2>nul
+echo [DEBUG] Source skills found, ensuring target dir exists...
+
+REM 确保父目录存在
+set "CLAUDE_DIR=%USERPROFILE%\.claude"
+if not exist "%CLAUDE_DIR%" (
+    echo [DEBUG] Creating .claude dir...
+    mkdir "%CLAUDE_DIR%" 2>nul
     if errorlevel 1 (
-        echo ⚠️  无法创建目录: %GLOBAL_SKILLS_DIR%
-        goto :SKIP_SKILLS
+        echo [DEBUG] Failed to create .claude dir
+    ) else (
+        echo [DEBUG] Created .claude dir
     )
 )
 
-REM 同步 skills
+if not exist "%GLOBAL_SKILLS_DIR%" (
+    echo [DEBUG] Creating skills dir: %GLOBAL_SKILLS_DIR%
+    mkdir "%GLOBAL_SKILLS_DIR%" 2>nul
+    if errorlevel 1 (
+        echo [DEBUG] Failed to create skills dir
+    ) else (
+        echo [DEBUG] Created skills dir
+    )
+)
+
+if not exist "%GLOBAL_SKILLS_DIR%" (
+    echo [DEBUG] Skills dir still not exist, skip sync
+echo.
+    goto :SKIP_SKILLS
+)
+
 set "NEW_COUNT=0"
 for /d %%S in ("%SOURCE_SKILLS_DIR%\*") do (
+    set "SKILL_NAME=%%~nxS"
     if exist "%%S\SKILL.md" (
-        set "SKILL_NAME=%%~nxS"
         if not exist "%GLOBAL_SKILLS_DIR%\!SKILL_NAME!" (
+            echo [DEBUG] Copying: !SKILL_NAME!
             xcopy /E /I /Q "%%S" "%GLOBAL_SKILLS_DIR%\!SKILL_NAME!\" >nul 2>&1
-            if not errorlevel 1 (
+            if errorlevel 1 (
+                echo [DEBUG]   xcopy failed, trying robocopy...
+                robocopy "%%S" "%GLOBAL_SKILLS_DIR%\!SKILL_NAME!" /E /NFL /NDL /NJH /NJS >nul 2>&1
+                if errorlevel 8 (
+                    echo [DEBUG]   robocopy also failed
+                ) else (
+                    echo [DEBUG]   robocopy success
+                    set /a NEW_COUNT+=1
+                )
+            ) else (
+                echo [DEBUG]   xcopy success
                 set /a NEW_COUNT+=1
             )
+        ) else (
+            echo [DEBUG] Already exists: !SKILL_NAME!
         )
     )
 )
 
 if %NEW_COUNT% gtr 0 (
     echo ✓ 已同步 %NEW_COUNT% 个新 skills
-    echo.
+echo.
 )
 
 :SKIP_SKILLS
 
-REM =========================== AI 工作目录链接 ===========================
-
+REM AI 目录链接
 set "AI_WORKSPACE_DIR=%DEVELOP_ASSISTANT_DIR%\.ai"
 
-if exist ".git" (
-    goto :LINK_AI
-)
-if exist "package.json" (
-    goto :LINK_AI
-)
+if exist ".git" goto :LINK_AI
+if exist "package.json" goto :LINK_AI
 goto :START_CLAUDE
 
 :LINK_AI
 for %%I in ("%CD%") do set "PROJECT_NAME=%%~nxI"
 set "PROJECT_AI_DIR=%AI_WORKSPACE_DIR%\%PROJECT_NAME%"
 
-REM 处理 .ai 目录
 if exist ".ai\" (
     if not exist ".ai\junction.flag" (
-        set "BACKUP_NAME=.ai.backup.%date:~0,4%%date:~5,2%%date:~8,2%.%time:~0,2%%time:~3,2%%time:~6,2%"
-        set "BACKUP_NAME=!BACKUP_NAME: =0!"
-        ren ".ai" "!BACKUP_NAME!" >nul 2>&1
+        ren ".ai" ".ai.backup.%random%" >nul 2>&1
         goto :CREATE_LINK
-    ) else (
-        goto :START_CLAUDE
     )
 ) else if exist ".ai" (
     del ".ai" >nul 2>&1
@@ -113,5 +135,4 @@ if not errorlevel 1 (
 
 :START_CLAUDE
 claude --add-dir "%DEVELOP_ASSISTANT_DIR%" %*
-
 endlocal
