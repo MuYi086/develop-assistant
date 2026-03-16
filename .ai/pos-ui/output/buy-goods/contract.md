@@ -1,4 +1,61 @@
-# 购买商品 - 组件契约
+# buy-goods - 领域与契约
+
+## 1. 术语表更新建议
+
+### 新增术语
+
+| 业务词 | 英文名 | 含义 | 所属领域 |
+|--------|--------|------|----------|
+| 商品 | Goods | 门店销售的商品，含单品和套餐 | POS |
+| 单品 | SingleGoods | 单一商品，无需选择规格 | POS |
+| 套餐 | ComboGoods | 组合商品，含多个可选规格 | POS |
+| SKU | Sku | 库存量单位，具体规格的商品实例 | POS |
+| 规格属性 | Attribute | 套餐的可选属性（如辣度、份量） | POS |
+| 规格属性值 | AttributeValue | 属性的具体选项 | POS |
+| 购物车 | ShoppingCart | 待结算商品的临时容器 | POS |
+| 购物车项 | CartItem | 购物车中的单个商品记录 | POS |
+| 用餐方式 | DiningWay | 堂食(IN)/外带(OUT) | POS |
+| 在售数量 | OnSaleNumber | 当前可售库存数量 | POS |
+| 沽清 | SoldOut | 商品售罄或停售状态 | POS |
+| 分类 | Category | 商品分类，用于筛选 | POS |
+| 门店商品 | SiteGoods | 与具体门店关联的商品 | POS |
+
+### 命名约定
+
+```
+组件命名: PascalCase
+  - BuyGoodsPage.vue
+  - ShoppingCartPanel.vue
+  - SpecSelectorDialog.vue
+
+组合式函数: use + PascalCase
+  - useGoodsList()
+  - useShoppingCart()
+  - useCategoryFilter()
+
+Store命名: use + Store名称 + Store
+  - useGoodsStore
+  - useCartStore
+
+类型命名: PascalCase + 后缀
+  - GoodsItem
+  - CartItem
+  - CategoryItem
+  - SkuAttribute
+
+枚举命名: 大写下划线 + Enum后缀
+  - GoodsTypeEnum.SINGLE
+  - GoodsTypeEnum.COMBO
+  - DiningWayEnum.IN
+  - DiningWayEnum.OUT
+
+接口请求: camelCase + Api后缀
+  - goodsListApi()
+  - categoryListApi()
+  - skuDetailApi()
+```
+
+## 2. 组件契约
 
 ## 页面路由
 
@@ -370,3 +427,135 @@ interface CartActions {
 | 购物车 | Shopping Cart | 存放待结算商品 | `CartStore` |
 | 用餐方式 | Dining Way | 就餐/外带模式 | `diningWay` |
 | 沽清 | Stock Out | 商品库存管理 | `posStockNumber` |
+| 缺省图 | Placeholder Image | 图片加载失败显示 | `defaultImage` |
+
+## 4. 测试契约
+
+### 4.1 用例1: 正常流程 - 单品加购并提交
+
+#### 前置条件
+- 用户已登录
+- 商品列表已加载
+- 购物车为空
+
+#### 步骤
+1. 点击单品商品卡片"红烧肉套餐"
+2. 验证购物车显示该商品，数量=1
+3. 点击"+"增加数量至2
+4. 点击"去收款"
+5. 验证跳转到确认订单页
+
+#### 预期结果
+- 商品正确加入购物车
+- 数量计算正确
+- 总价计算正确
+- 成功跳转
+
+### 4.2 用例2: 正常流程 - 套餐规格选择后加购
+
+#### 前置条件
+- 商品列表包含套餐类型商品
+
+#### 步骤
+1. 点击套餐商品卡片"小龙虾套餐"
+2. 验证弹出规格选择弹窗
+3. 选择规格"麻辣"+"大份"
+4. 点击"添加到购物车"
+5. 验证弹窗关闭，购物车显示该套餐
+
+#### 预期结果
+- 规格弹窗正确显示属性
+- 选择规格后显示对应SKU价格
+- 正确加入购物车
+- 购物车显示规格信息
+
+### 4.3 用例3: 异常流程 - 切换用餐方式冲突
+
+#### 前置条件
+- 购物车有商品
+- 当前用餐方式为"堂食"
+
+#### 步骤
+1. 点击切换用餐方式为"外带"
+2. 系统检测到冲突商品
+3. 验证显示二次确认弹窗
+4. 点击"确认"
+5. 验证冲突商品被移除
+
+#### 预期结果
+- 正确检测到不兼容商品
+- 弹窗显示正确提示
+- 确认后移除冲突商品
+- 用餐方式成功切换
+
+### 4.4 用例4: 异常流程 - 购物车为空提交
+
+#### 前置条件
+- 购物车为空
+
+#### 步骤
+1. 查看购物车面板
+2. 验证"去收款"按钮状态
+
+#### 预期结果
+- 按钮为禁用状态
+- 不可点击
+
+### 4.5 用例5: 边缘情况 - 商品查询超时
+
+#### 前置条件
+- 网络延迟设置>5s
+
+#### 步骤
+1. 加载商品列表
+2. 等待超时
+
+#### 预期结果
+- 显示"获取数据超时"提示
+- 提供重试按钮
+
+### 4.6 用例6: 边缘情况 - SKU规格不存在
+
+#### 前置条件
+- 套餐规格弹窗已打开
+
+#### 步骤
+1. 选择一组无效规格组合
+2. 验证SKU查询返回status=2
+
+#### 预期结果
+- 显示"规格不存在"提示
+- 不可添加到购物车
+
+### 4.7 用例7: 边缘情况 - 库存为零的商品
+
+#### 前置条件
+- 有商品库存为0
+
+#### 步骤
+1. 查看商品列表
+2. 验证售罄商品显示
+3. 点击售罄商品
+
+#### 预期结果
+- 售罄商品有明确标识
+- 点击后提示"已售罄"
+- 不可加入购物车
+
+## 5. 错误码映射
+
+| 后端错误码 | 前端错误类型 | 处理方式 |
+|-----------|-------------|---------|
+| 401 | AuthError.UNAUTHORIZED | 跳转登录 |
+| 403 | AuthError.FORBIDDEN | 提示无权限 |
+| 500 | ApiError.SERVER_ERROR | 显示服务端错误 |
+| 20001 | BusinessError.GOODS_NOT_FOUND | 显示商品不存在 |
+| 20002 | BusinessError.SKU_INVALID | 显示规格无效 |
+| 20003 | BusinessError.STOCK_NOT_ENOUGH | 显示库存不足 |
+| 30001 | BusinessError.CART_EMPTY | 购物车为空提示 |
+
+---
+
+**生成时间**: 2026-03-16
+**Layer**: 3
+**状态**: 已完成
