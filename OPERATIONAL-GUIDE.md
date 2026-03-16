@@ -47,6 +47,8 @@ echo -e "\033]1337;SetNotification=测试通知\007"
 
 ### 0.3 配置 Shell 别名
 
+**Linux/Mac (Bash/Zsh):**
+
 ```bash
 # 添加到 ~/.bashrc 或 ~/.zshrc
 cat >> ~/.bashrc << 'EOF'
@@ -62,13 +64,74 @@ EOF
 source ~/.bashrc
 ```
 
+**Windows (CMD):**
+
+```cmd
+:: 创建快捷命令（使用 doskey，临时生效）
+doskey claude-ai=claude --add-dir %USERPROFILE%\develop-assistant $*
+doskey claude-ai-dev=claude --add-dir %USERPROFILE%\develop-assistant --verbose $*
+doskey dev-assist=cd /d %USERPROFILE%\develop-assistant
+
+:: 或添加到 PATH 环境变量（推荐，永久生效）
+:: 1. 将 scripts 目录添加到用户 PATH
+setx PATH "%PATH%;%USERPROFILE%\develop-assistant\scripts"
+:: 2. 重启终端后，直接使用 claude-ai.cmd
+```
+
+**Windows (PowerShell):**
+
+```powershell
+# 添加到 PowerShell 配置文件
+$profilePath = $PROFILE
+if (!(Test-Path $profilePath)) {
+    New-Item -ItemType File -Path $profilePath -Force
+}
+
+Add-Content $profilePath @"
+# Claude AI 开发助手
+function claude-ai { & claude --add-dir $env:USERPROFILE\develop-assistant @args }
+function claude-ai-dev { & claude --add-dir $env:USERPROFILE\develop-assistant --verbose @args }
+function dev-assist { Set-Location $env:USERPROFILE\develop-assistant }
+"@
+
+# 重新加载配置
+. $profilePath
+```
+
+**Windows (Git Bash):**
+
+```bash
+# Git Bash 可以使用 Linux 风格的别名
+echo 'alias claude-ai="claude --add-dir \$HOME/develop-assistant"' >> ~/.bashrc
+echo 'alias claude-ai-dev="claude --add-dir \$HOME/develop-assistant --verbose"' >> ~/.bashrc
+echo 'alias dev-assist="cd \$HOME/develop-assistant"' >> ~/.bashrc
+source ~/.bashrc
+```
+
 ### 0.4 验证辅助项目路径
 
+**Linux/Mac:**
 ```bash
 # 确认 develop-assistant 目录存在
 ls -la ~/develop-assistant/.claude/settings.json
 ls -la ~/develop-assistant/scripts/pencil-parser.js
 ls -la ~/develop-assistant/testData.pen
+```
+
+**Windows (CMD):**
+```cmd
+:: 确认 develop-assistant 目录存在
+dir "%USERPROFILE%\develop-assistant\.claude\settings.json"
+dir "%USERPROFILE%\develop-assistant\scripts\pencil-parser.js"
+dir "%USERPROFILE%\develop-assistant\testData.pen"
+```
+
+**Windows (PowerShell):**
+```powershell
+# 确认 develop-assistant 目录存在
+Test-Path "$env:USERPROFILE\develop-assistant\.claude\settings.json"
+Test-Path "$env:USERPROFILE\develop-assistant\scripts\pencil-parser.js"
+Test-Path "$env:USERPROFILE\develop-assistant\testData.pen"
 ```
 
 **预期输出**：
@@ -145,9 +208,28 @@ export default {
 
 ### 1.3 启动带辅助项目的 Claude
 
+**Linux/Mac:**
 ```bash
 cd ~/vibe-coding-demo
 claude-ai
+```
+
+**Windows (CMD):**
+```cmd
+cd C:\Users\%USERNAME%\vibe-coding-demo
+:: 如果已添加到 PATH
+claude-ai.cmd
+:: 或直接使用完整路径
+"%USERPROFILE%\develop-assistant\scripts\claude-ai.cmd"
+```
+
+**Windows (Git Bash):**
+```bash
+cd ~/vibe-coding-demo
+# 可以使用 Linux 脚本
+~/develop-assistant/scripts/claude-ai.sh
+# 或使用 Windows 脚本
+/c/Users/$USERNAME/develop-assistant/scripts/claude-ai.cmd
 ```
 
 ### 1.4 验证 Skills 加载
@@ -181,7 +263,7 @@ claude-ai
 
 ### 2.1 创建 .ai/ 目录结构
 
-在 Claude 中执行：
+在 Claude 中执行（或使用 Git Bash）：
 
 ```bash
 # 创建目录结构
@@ -199,12 +281,38 @@ touch .ai/input/api/order-api.md
 cp ~/develop-assistant/testData.pen .ai/input/pencil/order-page.pen
 ```
 
+**Windows (CMD) 等效命令：**
+```cmd
+:: 创建目录结构
+mkdir .ai\input\prd
+mkdir .ai\input\api
+mkdir .ai\input\pencil
+mkdir .ai\output\order-page
+mkdir .ai\context
+mkdir .ai\skills
+
+:: 创建初始文件
+type nul > .ai\context\glossary.md
+type nul > .ai\input\prd\order-page-prd.md
+type nul > .ai\input\api\order-api.md
+
+:: 复制设计稿
+copy "%USERPROFILE%\develop-assistant\testData.pen" .ai\input\pencil\order-page.pen
+```
+
 ### 2.2 添加到 .gitignore
 
 ```bash
 echo ".ai/" >> .gitignore
 echo "*.local" >> .gitignore
 echo "screenshots/" >> .gitignore
+```
+
+**Windows (CMD):**
+```cmd
+echo .ai/ >> .gitignore
+echo *.local >> .gitignore
+echo screenshots/ >> .gitignore
 ```
 
 ### 2.3 初始化术语表
@@ -1395,6 +1503,7 @@ echo -e "\033]1337;SetNotification=测试\007"
 
 ### 常用命令
 
+**Linux/Mac:**
 ```bash
 # 启动开发
 claude-ai
@@ -1414,6 +1523,26 @@ node ~/develop-assistant/scripts/pencil-parser.js \
   .ai/output/order-page/pencil-analysis.json
 ```
 
+**Windows (CMD):**
+```cmd
+:: 启动开发
+claude-ai.cmd
+cd C:\Users\%USERNAME%\vibe-coding-demo
+npm run dev
+
+:: 运行测试
+npm run test:unit
+npm run test:unit -- --watch
+
+:: 构建
+npm run build
+
+:: 解析设计稿
+node "%USERPROFILE%\develop-assistant\scripts\pencil-parser.js" ^
+  .ai\input\pencil\order-page.pen ^
+  .ai\output\order-page\pencil-analysis.json
+```
+
 ### Layer 快捷键
 
 ```
@@ -1428,8 +1557,19 @@ node ~/develop-assistant/scripts/pencil-parser.js \
 
 ### 文件模板位置
 
+**Linux/Mac:**
 ```
 ~/develop-assistant/templates/
+├── dot-ai-structure.md
+├── raw.md.template
+├── contract.md.template
+├── red.md.template
+└── green.md.template
+```
+
+**Windows:**
+```
+%USERPROFILE%\develop-assistant\templates\
 ├── dot-ai-structure.md
 ├── raw.md.template
 ├── contract.md.template

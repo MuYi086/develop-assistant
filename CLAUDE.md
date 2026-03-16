@@ -136,14 +136,9 @@ echo -e "\033]1337;SetNotification=AI任务已完成\007"
 
 **仓库**: `git@github.com:MuYi086/develop-assistant.git`（私有）
 
-```bash
-# ===== 公司电脑（已配置完成）=====
-# 日常同步
-cd ~/develop-assistant
-git add .
-git commit -m "update: 描述你的变更"
-git push
+#### Linux/Mac 环境（家里）
 
+```bash
 # ===== 家里电脑（首次配置）=====
 # 1. 克隆仓库
 git clone git@github.com:MuYi086/develop-assistant.git ~/develop-assistant
@@ -160,14 +155,55 @@ cd ~/develop-assistant
 git pull  # 拉取公司电脑的更新
 ```
 
+#### Windows 环境（公司）
+
+```cmd
+:: ===== 公司电脑（首次配置）=====
+:: 1. 克隆仓库（在 Git Bash 或 CMD 中）
+git clone git@github.com:MuYi086/develop-assistant.git %USERPROFILE%\develop-assistant
+
+:: 2. 添加 scripts 目录到 PATH（用户级环境变量）
+setx PATH "%PATH%;%USERPROFILE%\develop-assistant\scripts"
+
+:: 3. 重启终端后，使用 claude-ai.cmd 启动
+cd C:\path\to\your-project
+claude-ai.cmd
+```
+
+**Windows 推荐方式**：
+- 使用 `claude-ai.cmd`（Windows CMD/Batch 版本）
+- 或使用 Git Bash 运行 `claude-ai.sh`（Bash 版本）
+
+#### 通用配置
+
+```bash
+# ===== 所有系统日常同步 =====
+cd ~/develop-assistant  # Linux/Mac
+:: 或
+cd %USERPROFILE%\develop-assistant  # Windows CMD
+
+git add .
+git commit -m "update: 描述你的变更"
+git push
+```
+
 ### 协作方式
 
 ```bash
-# 方案1：本地目录引入（推荐）
+# Linux/Mac - 方案1：本地目录引入（推荐）
 claude-ai
 
-# 方案2：直接运行脚本
+# Linux/Mac - 方案2：直接运行脚本
 ~/develop-assistant/scripts/claude-ai.sh
+```
+
+```cmd
+:: Windows - 方案1：直接运行脚本（推荐）
+cd C:\path\to\your-project
+claude-ai.cmd
+
+:: Windows - 方案2：Git Bash 环境
+"%USERPROFILE%\develop-assistant\scripts\claude-ai.sh"
 ```
 
 ---
@@ -223,10 +259,24 @@ claude-ai
 
 ### 第一步：配置别名（推荐）
 
+**Linux/Mac:**
 ```bash
 # 添加到 ~/.bashrc 或 ~/.zshrc
 echo 'alias claude-ai="\$HOME/develop-assistant/scripts/claude-ai.sh"' >> ~/.bashrc
 source ~/.bashrc
+```
+
+**Windows (CMD):**
+```cmd
+:: 添加到用户 PATH 环境变量
+setx PATH "%PATH%;%USERPROFILE%\develop-assistant\scripts"
+:: 然后重启终端，之后可以直接使用 claude-ai.cmd
+```
+
+**Windows (PowerShell):**
+```powershell
+# 添加到 PowerShell 配置文件
+Add-Content $PROFILE "`nfunction claude-ai { & `$env:USERPROFILE\develop-assistant\scripts\claude-ai.cmd @args }"
 ```
 
 ### 第二步：初始化业务项目
