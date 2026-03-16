@@ -1,1 +1,1 @@
-1. plan模式，你先阅读pos-ui/input/pencil/buy-goods.pen的文件，然后结合prd/buy-goods.md的文档。重新生成后面流程需要的1-7步骤，和我确认流程一步一步执行
+1. plan模式，你先阅读pos-ui/input/下的文档。重新生成后面流程需要的1-7步骤，和我确认流程一步一步执行
