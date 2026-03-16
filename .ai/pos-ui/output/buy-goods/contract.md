@@ -78,6 +78,7 @@ Store命名: use + Store名称 + Store
 | **QuantityStepper** | **Component** | `components/QuantityStepper.vue` | **数量加减器（复用组件）** |
 | DiningModeSwitch | Component | `views/buy-goods/components/DiningModeSwitch.vue` | 用餐方式切换 |
 | ConfirmDialog | Component | `components/ConfirmDialog.vue` | 通用确认弹窗 |
+| **MoreMenu** | **Component** | `views/buy-goods/components/MoreMenu.vue` | **更多菜单（隐藏售罄、重置本机商品）** |
 
 ## Props 契约
 
@@ -223,7 +224,7 @@ interface QuantityStepperProps {
   value: number;
   /** 最小值 */
   min?: number;
-  /** 最大值 */
+  /** 最大值，默认999（购物车商品数量上限999件） */
   max?: number;
   /** 步长 */
   step?: number;
@@ -262,6 +263,8 @@ interface QuantityStepperEvents {
 | CartItem | `remove` | `id: string` | 删除商品 |
 | DiningModeSwitch | `change` | `diningWay: string` | 切换用餐方式 |
 | DiningModeSwitch | `before-change` | `diningWay: string` | 切换前检查 |
+| **MoreMenu** | **`toggle-show-sold-out`** | - | **切换隐藏售罄状态** |
+| **MoreMenu** | **`reset-local-goods`** | - | **重置本机商品** |
 
 ## Store 契约 (Pinia) - 拆分设计
 
@@ -303,6 +306,9 @@ interface ProductActions {
   // 搜索
   searchProducts(goodsName: string): void;
   toggleShowSoldOut(): void;
+
+  // 更多菜单操作
+  resetLocalGoods(): void;
 
   // 规格选择
   openSpecSelector(product: Product): void;
