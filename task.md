@@ -1,1 +1,1 @@
-1. 
+plan模式：我是一名Vue2+Vue3+JS+TS的前端开发者，UI框架使用Element和Uniapp，UI的设计稿是figma，后端语言是Java,我期望你推荐一些能辅助我前端开发的plugin或者skills，如果plugin或者skills功能重叠，你帮我选出最佳的

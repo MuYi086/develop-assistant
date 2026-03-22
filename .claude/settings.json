@@ -73,46 +73,6 @@
       "source": ".agents/skills/performance",
       "sourceType": "local"
     },
-    "layer1-document-capture": {
-      "source": ".agents/skills/layer1-document-capture",
-      "sourceType": "local"
-    },
-    "layer2-requirement-analysis": {
-      "source": ".agents/skills/layer2-requirement-analysis",
-      "sourceType": "local"
-    },
-    "layer3-contract-definition": {
-      "source": ".agents/skills/layer3-contract-definition",
-      "sourceType": "local"
-    },
-    "layer4-red-tests": {
-      "source": ".agents/skills/layer4-red-tests",
-      "sourceType": "local"
-    },
-    "layer5-green-implementation": {
-      "source": ".agents/skills/layer5-green-implementation",
-      "sourceType": "local"
-    },
-    "layer6-delivery": {
-      "source": ".agents/skills/layer6-delivery",
-      "sourceType": "local"
-    },
-    "layer7-knowledge-accumulation": {
-      "source": ".agents/skills/layer7-knowledge-accumulation",
-      "sourceType": "local"
-    },
-    "pencil-json-parser": {
-      "source": ".agents/skills/pencil-json-parser",
-      "sourceType": "local"
-    },
-    "pencil-to-vue": {
-      "source": ".agents/skills/pencil-to-vue",
-      "sourceType": "local"
-    },
-    "pencil-to-tailwind": {
-      "source": ".agents/skills/pencil-to-tailwind",
-      "sourceType": "local"
-    },
     "visual-regression-testing": {
       "source": ".agents/skills/visual-regression-testing",
       "sourceType": "local"
