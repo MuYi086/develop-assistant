@@ -73,8 +73,28 @@
       "source": ".agents/skills/performance",
       "sourceType": "local"
     },
-    "visual-regression-testing": {
-      "source": ".agents/skills/visual-regression-testing",
+    "code-review-skill": {
+      "source": ".agents/skills/code-review-skill",
+      "sourceType": "local"
+    },
+    "frontend-design": {
+      "source": ".agents/skills/frontend-design",
+      "sourceType": "local"
+    },
+    "skill-creator": {
+      "source": ".agents/skills/skill-creator",
+      "sourceType": "local"
+    },
+    "theme-factory": {
+      "source": ".agents/skills/theme-factory",
+      "sourceType": "local"
+    },
+    "uniapp-frontend-skills": {
+      "source": ".agents/skills/uniapp-frontend-skills",
+      "sourceType": "local"
+    },
+    "webapp-testing": {
+      "source": ".agents/skills/webapp-testing",
       "sourceType": "local"
     }
   }
