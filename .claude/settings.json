@@ -96,6 +96,10 @@
     "webapp-testing": {
       "source": ".agents/skills/webapp-testing",
       "sourceType": "local"
+    },
+    "jsdoc-best-practices": {
+      "source": ".agents/skills/jsdoc-best-practices",
+      "sourceType": "local"
     }
   }
 }
