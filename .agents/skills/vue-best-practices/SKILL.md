@@ -1,10 +1,10 @@
 ---
 name: vue-best-practices
-description: MUST be used for Vue.js tasks. Strongly recommends Composition API with `<script setup>` and TypeScript as the standard approach. Covers Vue 3, SSR, Volar, vue-tsc. Load for any Vue, .vue files, Vue Router, Pinia, or Vite with Vue work. ALWAYS use Composition API unless the project explicitly requires Options API.
+description: Use for ALL Vue.js tasks - development, debugging, and testing. Covers Vue 2/3, Composition API, Options API, Pinia, Vue Router, Vitest, Playwright, and TypeScript. Triggers for: Vue component work, .vue files, Vue errors/warnings, test writing, debugging Vue issues, or any Vue-related question.
 license: MIT
 metadata:
   author: github.com/vuejs-ai
-  version: "18.0.0"
+  version: "19.0.0"
 ---
 
 # Vue Best Practices Workflow
@@ -152,3 +152,76 @@ Performance work is a post-functionality pass. Do not optimize before core behav
 - Moved state/side effects into composables if applicable
 - Optional features are used only when requirements demand them.
 - Performance changes were applied only after functionality was complete.
+
+## 6) Debugging Vue issues (when encountering errors or unexpected behavior)
+
+Use this section when diagnosing or fixing Vue runtime issues, warnings, or bugs.
+
+### Quick Reference by Symptom
+
+**Reactivity issues:**
+- Tracing unexpected re-renders → [reactivity-debugging-hooks](references/reactivity-debugging-hooks.md)
+- Ref values not updating → [ref-value-access](references/ref-value-access.md)
+- State stops updating after destructuring → [reactive-destructuring](references/reactive-destructuring.md)
+- Refs inside arrays/Maps/Sets not unwrapping → [refs-in-collections-need-value](references/refs-in-collections-need-value.md)
+- Proxy identity comparisons returning false → [reactivity-proxy-identity-hazard](references/reactivity-proxy-identity-hazard.md)
+
+**Computed/Watcher issues:**
+- Computed triggers mutations unexpectedly → [computed-no-side-effects](references/computed-no-side-effects.md)
+- Computed value never updates → [computed-conditional-dependencies](references/computed-conditional-dependencies.md)
+- Watcher overwrites with stale data → [watch-async-cleanup](references/watch-async-cleanup.md)
+- Watcher never triggers for reactive properties → [watch-reactive-property-getter](references/watch-reactive-property-getter.md)
+- DOM reads stale inside watchers → [watch-flush-timing](references/watch-flush-timing.md)
+
+**Component issues:**
+- Child component throws "not found" → [local-components-not-in-descendants](references/local-components-not-in-descendants.md)
+- Click listener doesn't fire on custom component → [click-events-on-components](references/click-events-on-components.md)
+- Parent can't access child ref data → [component-ref-requires-defineexpose](references/component-ref-requires-defineexpose.md)
+- HTML template parsing breaks Vue syntax → [in-dom-template-parsing-caveats](references/in-dom-template-parsing-caveats.md)
+
+**Props & Emits issues:**
+- Variables in defineProps cause errors → [prop-defineprops-scope-limitation](references/prop-defineprops-scope-limitation.md)
+- Component emits undeclared event → [declare-emits-for-documentation](references/declare-emits-for-documentation.md)
+- Event fires twice on click → [undeclared-emits-double-firing](references/undeclared-emits-double-firing.md)
+
+**Template issues:**
+- "Cannot read property of undefined" → [v-if-null-check-order](references/v-if-null-check-order.md)
+- Mixing v-if with v-for causes bugs → [no-v-if-with-v-for](references/no-v-if-with-v-for.md)
+- List items disappearing or swapping state → [v-for-key-attribute](references/v-for-key-attribute.md)
+
+**Lifecycle issues:**
+- Memory leaks from event listeners → [cleanup-side-effects](references/cleanup-side-effects.md)
+- DOM access fails before mount → [lifecycle-dom-access-timing](references/lifecycle-dom-access-timing.md)
+- DOM reads return stale values → [dom-update-timing-nexttick](references/dom-update-timing-nexttick.md)
+
+**TypeScript issues:**
+- Mutable prop defaults leak state → [ts-withdefaults-mutable-factory-function](references/ts-withdefaults-mutable-factory-function.md)
+- Template refs throw null errors → [ts-template-ref-null-handling](references/ts-template-ref-null-handling.md)
+- Optional boolean props behave as false → [ts-defineprops-boolean-default-false](references/ts-defineprops-boolean-default-false.md)
+
+**Performance issues:**
+- List children re-render unnecessarily → [perf-props-stability-update-optimization](references/perf-props-stability-update-optimization.md)
+- Computed objects retrigger effects → [perf-computed-object-stability](references/perf-computed-object-stability.md)
+
+## 7) Testing Vue components (when writing or fixing tests)
+
+Use this section when writing tests with Vitest, Vue Test Utils, or Playwright.
+
+### Test Setup
+
+- Setting up test infrastructure → [testing-vitest-recommended-for-vue](references/testing-vitest-recommended-for-vue.md)
+- Composables with lifecycle hooks fail to test → [testing-composables-helper-wrapper](references/testing-composables-helper-wrapper.md)
+- "injection Symbol(pinia) not found" errors → [testing-pinia-store-setup](references/testing-pinia-store-setup.md)
+- Async setup components won't render → [testing-suspense-async-components](references/testing-suspense-async-components.md)
+
+### Test Patterns
+
+- Tests breaking on refactoring → [testing-component-blackbox-approach](references/testing-component-blackbox-approach.md)
+- Intermittent race conditions → [testing-async-await-flushpromises](references/testing-async-await-flushpromises.md)
+- Snapshot tests passing despite broken functionality → [testing-no-snapshot-only](references/testing-no-snapshot-only.md)
+- Teleported content can't be found → [teleport-testing-complexity](references/teleport-testing-complexity.md)
+
+### E2E Testing
+
+- Choosing E2E framework → [testing-e2e-playwright-recommended](references/testing-e2e-playwright-recommended.md)
+- Verifying computed styles or real DOM events → [testing-browser-vs-node-runners](references/testing-browser-vs-node-runners.md)
