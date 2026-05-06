@@ -45,14 +45,6 @@
       "source": ".agents/skills/vue-router-best-practices",
       "sourceType": "local"
     },
-    "vue-testing-best-practices": {
-      "source": ".agents/skills/vue-testing-best-practices",
-      "sourceType": "local"
-    },
-    "vue-debug-guides": {
-      "source": ".agents/skills/vue-debug-guides",
-      "sourceType": "local"
-    },
     "typescript-advanced-types": {
       "source": ".agents/skills/typescript-advanced-types",
       "sourceType": "local"
@@ -65,16 +57,24 @@
       "source": ".agents/skills/vitest",
       "sourceType": "local"
     },
+    "architecture-diagram": {
+      "source": ".agents/skills/architecture-diagram",
+      "sourceType": "local"
+    },
     "api-testing-observability-api-mock": {
       "source": ".agents/skills/api-testing-observability-api-mock",
+      "sourceType": "local"
+    },
+    "rag-skill": {
+      "source": ".agents/skills/rag-skill",
       "sourceType": "local"
     },
     "performance": {
       "source": ".agents/skills/performance",
       "sourceType": "local"
     },
-    "code-review-skill": {
-      "source": ".agents/skills/code-review-skill",
+    "gpt-image-2": {
+      "source": ".agents/skills/gpt-image-2",
       "sourceType": "local"
     },
     "frontend-design": {
@@ -91,6 +91,10 @@
     },
     "uniapp-frontend-skills": {
       "source": ".agents/skills/uniapp-frontend-skills",
+      "sourceType": "local"
+    },
+    "web-design-engineer": {
+      "source": ".agents/skills/web-design-engineer",
       "sourceType": "local"
     },
     "webapp-testing": {
