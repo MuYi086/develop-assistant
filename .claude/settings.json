@@ -20,6 +20,10 @@
       "TaskUpdate",
       "mcp__ide",
       "Skill"
+    ],
+    "deny": [
+      "Bash(rm:*)",
+      "Bash(git:push:*)"
     ]
   },
   "skills": {
@@ -111,5 +115,9 @@
       "source": ".agents/skills/jsdoc-best-practices",
       "sourceType": "local"
     }
+  },
+  "sandbox": {
+    "autoAllowBashIfSandboxed": false,
+    "enabled": true
   }
 }
