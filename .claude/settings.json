@@ -1,4 +1,11 @@
 {
+  "enabledMcpjsonServers": [
+    "github",
+    "yunxiao",
+    "chrome-devtools"
+  ],
+  "language": "中文",
+  "theme": "dark-daltonized",
   "permissions": {
     "allow": [
       "*",
@@ -11,7 +18,6 @@
       "Agent",
       "TaskCreate",
       "TaskUpdate",
-      "mcp__pencil",
       "mcp__ide",
       "Skill"
     ]

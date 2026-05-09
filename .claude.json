@@ -1,0 +1,605 @@
+{
+  "numStartups": 228,
+  "installMethod": "global",
+  "autoUpdates": true,
+  "theme": "dark-daltonized",
+  "tipsHistory": {
+    "agent-flag": 198,
+    "color-when-multi-clauding": 212,
+    "continue": 220,
+    "custom-agents": 228,
+    "custom-commands": 199,
+    "default-permission-mode-config": 226,
+    "desktop-app": 199,
+    "double-esc-code-restore": 220,
+    "drag-and-drop-images": 220,
+    "enter-to-steer-in-relatime": 210,
+    "feedback-command": 198,
+    "frontend-design-plugin": 88,
+    "git-worktrees": 219,
+    "image-paste": 218,
+    "install-github-app": 201,
+    "install-slack-app": 203,
+    "memory-command": 223,
+    "mobile-app": 200,
+    "new-user-warmup": 9,
+    "permissions": 220,
+    "plan-mode-for-complex-tasks": 226,
+    "powershell-tool-env": 220,
+    "prompt-queue": 13,
+    "rename-conversation": 225,
+    "shift-enter": 219,
+    "shift-tab": 221,
+    "status-line": 216,
+    "theme-command": 209,
+    "todo-list": 216,
+    "web-app": 200
+  },
+  "promptQueueUseCount": 16,
+  "cachedGrowthBookFeatures": {
+    "enhanced_telemetry_beta": false,
+    "tengu-top-of-feed-tip": {
+      "color": "dim",
+      "tip": ""
+    },
+    "tengu_1p_event_batch_config": {},
+    "tengu_attribution_header": true,
+    "tengu_brass_pebble": false,
+    "tengu_c4w_usage_limit_notifications_enabled": false,
+    "tengu_claudeai_mcp_connectors": false,
+    "tengu_code_diff_cli": false,
+    "tengu_disable_bypass_permissions_mode": false,
+    "tengu_event_sampling_config": {},
+    "tengu_keybinding_customization": false,
+    "tengu_keybinding_customization_release": false,
+    "tengu_kv7_prompt_sort": false,
+    "tengu_log_datadog_events": false,
+    "tengu_log_segment_events": false,
+    "tengu_marble_kite": false,
+    "tengu_mcp_tool_search": true,
+    "tengu_pid_based_version_locking": false,
+    "tengu_post_compact_survey": false,
+    "tengu_pr_status_cli": false,
+    "tengu_react_vulnerability_warning": false,
+    "tengu_scarf_coffee": false,
+    "tengu_scratch": false,
+    "tengu_thinkback": false,
+    "tengu_tool_pear": false,
+    "tengu_tool_search_unsupported_models": null
+  },
+  "cachedChromeExtensionInstalled": false,
+  "cachedStatsigGates": {
+    "tengu_disable_bypass_permissions_mode": false,
+    "tengu_migrate_ignore_patterns": false,
+    "tengu_tool_pear": false
+  },
+  "changelogLastFetched": 1769478265233,
+  "clientDataCache": {
+    "data": null,
+    "timestamp": 1772181167017
+  },
+  "companion": {
+    "hatchedAt": 1775037217574,
+    "name": "Gravy",
+    "personality": "A common octopus of few words."
+  },
+  "customApiUrl": "https://open.bigmodel.cn/api/anthropic",
+  "firstStartTime": "2025-07-14T01:08:56.674Z",
+  "githubRepoPaths": {
+    "ezviz-openbiz/ezuikit-flv": [
+      "C:\\Users\\Administrator\\Downloads\\EZUIKit-flv"
+    ],
+    "muyi086/audio-3d": [
+      "D:\\github\\audio-3d"
+    ],
+    "muyi086/blog": [
+      "D:\\github\\blog"
+    ],
+    "muyi086/develop-assistant": [
+      "D:\\github\\develop-assistant"
+    ],
+    "muyi086/huabing-frontend-publish": [
+      "D:\\work\\huabing-frontend-publish"
+    ],
+    "muyi086/pig-learn": [
+      "D:\\github\\pig-learn"
+    ]
+  },
+  "hasAvailableSubscription": false,
+  "hasCompletedOnboarding": true,
+  "hasIdeOnboardingBeenShown": {
+    "vscode": true
+  },
+  "hasOpusPlanDefault": false,
+  "isQualifiedForDataSharing": false,
+  "lastOnboardingVersion": "1.0.51",
+  "lastPlanModeUse": 1769504155832,
+  "lastReleaseNotesSeen": "2.1.131",
+  "mcpServers": {
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "headers": {
+        "Authorization": "Bearer ${GITHUB_TOKEN}"
+      }
+    },
+    "chrome-devtools": {
+      "type": "stdio",
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx -y chrome-devtools-mcp@latest"
+      ],
+      "env": {}
+    },
+    "yunxiao": {
+      "type": "stdio",
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx -y alibabacloud-devops-mcp-server"
+      ],
+      "env": {
+        "YUNXIAO_ACCESS_TOKEN": "${YUNXIAO_TOKEN}"
+      }
+    }
+  },
+  "metricsStatusCache": {
+    "enabled": false,
+    "timestamp": 1777342651517
+  },
+  "migrationVersion": 13,
+  "officialMarketplaceAutoInstallAttempted": true,
+  "officialMarketplaceAutoInstalled": true,
+  "opus45MigrationComplete": true,
+  "opus47LaunchSeenCount": 5,
+  "opusProMigrationComplete": true,
+  "projects": {
+    "D:/github/audio-3d": {
+      "allowedTools": [],
+      "disabledMcpjsonServers": [],
+      "enabledMcpjsonServers": [],
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "hasCompletedProjectOnboarding": true,
+      "hasTrustDialogAccepted": true,
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "projectOnboardingSeenCount": 0,
+      "lastGracefulShutdown": false,
+      "lastHintSessionId": "09389bad-aebd-4114-b085-ff0d80271de1",
+      "lastSessionFirstPrompt": "为该项目创建一个github issue,标题是\"test for claude code\"",
+      "lastSessionModified": 1778231811533
+    },
+    "D:/github/blog": {
+      "allowedTools": [],
+      "disabledMcpjsonServers": [],
+      "enabledMcpjsonServers": [],
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "hasCompletedProjectOnboarding": true,
+      "hasTrustDialogAccepted": true,
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "projectOnboardingSeenCount": 0
+    },
+    "D:/github/develop-assistant": {
+      "allowedTools": [],
+      "disabledMcpjsonServers": [],
+      "enabledMcpjsonServers": [],
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "hasCompletedProjectOnboarding": true,
+      "hasTrustDialogAccepted": true,
+      "lastGracefulShutdown": false,
+      "lastHintSessionId": "7bf2f524-e218-4640-8c12-6f935ada82f4",
+      "lastSessionFirstPrompt": "claude.md 用utf-8中文",
+      "lastSessionModified": 1778051586208,
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "projectOnboardingSeenCount": 0
+    },
+    "D:/github/element-plus-dev": {
+      "allowedTools": [],
+      "disabledMcpjsonServers": [],
+      "enabledMcpjsonServers": [],
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "hasCompletedProjectOnboarding": true,
+      "hasTrustDialogAccepted": true,
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "projectOnboardingSeenCount": 0
+    },
+    "D:/github/pig-learn": {
+      "allowedTools": [],
+      "disabledMcpjsonServers": [],
+      "enabledMcpjsonServers": [],
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "hasCompletedProjectOnboarding": true,
+      "hasTrustDialogAccepted": true,
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "projectOnboardingSeenCount": 0
+    },
+    "D:/work/huabing-frontend-publish": {
+      "allowedTools": [],
+      "disabledMcpjsonServers": [],
+      "enabledMcpjsonServers": [],
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "hasCompletedProjectOnboarding": true,
+      "hasTrustDialogAccepted": true,
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "projectOnboardingSeenCount": 0
+    },
+    "D:/work/huabing-ui-uniapp": {
+      "allowedTools": [],
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "hasCompletedProjectOnboarding": true,
+      "hasTrustDialogAccepted": true,
+      "lastAPIDuration": 2400,
+      "lastAPIDurationWithoutRetries": 2395,
+      "lastCost": 0.00282,
+      "lastDuration": 80489,
+      "lastFpsAverage": 0.88,
+      "lastFpsLow1Pct": 7.71,
+      "lastLinesAdded": 0,
+      "lastLinesRemoved": 0,
+      "lastModelUsage": {
+        "claude-haiku-4-5-20251001": {
+          "cacheCreationInputTokens": 0,
+          "cacheReadInputTokens": 0,
+          "costUSD": 0.00282,
+          "inputTokens": 2710,
+          "outputTokens": 22,
+          "webSearchRequests": 0
+        }
+      },
+      "lastSessionId": "0135760c-b2e7-4ca1-ba03-cbbc7f55053c",
+      "lastToolDuration": 0,
+      "lastTotalCacheCreationInputTokens": 0,
+      "lastTotalCacheReadInputTokens": 0,
+      "lastTotalInputTokens": 2710,
+      "lastTotalOutputTokens": 22,
+      "lastTotalWebSearchRequests": 0,
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "projectOnboardingSeenCount": 4,
+      "reactVulnerabilityCache": {
+        "detected": false,
+        "package": null,
+        "packageManager": null,
+        "packageName": null,
+        "version": null
+      }
+    },
+    "D:/work/huabing_uniapp_shangliao": {
+      "allowedTools": [],
+      "disabledMcpjsonServers": [],
+      "enabledMcpjsonServers": [],
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "hasTrustDialogAccepted": true,
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "projectOnboardingSeenCount": 0
+    },
+    "D:/work/operation-assistant-admin": {
+      "allowedTools": [],
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "hasCompletedProjectOnboarding": true,
+      "hasTrustDialogAccepted": true,
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "projectOnboardingSeenCount": 0,
+      "reactVulnerabilityCache": {
+        "detected": false,
+        "package": null,
+        "packageManager": null,
+        "packageName": null,
+        "version": null
+      }
+    },
+    "D:/work/pos-ui": {
+      "allowedTools": [],
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "hasCompletedProjectOnboarding": true,
+      "hasTrustDialogAccepted": true,
+      "lastAPIDuration": 7744,
+      "lastAPIDurationWithoutRetries": 7737,
+      "lastCost": 0.000282,
+      "lastDuration": 17193,
+      "lastFpsAverage": 2.45,
+      "lastFpsLow1Pct": 48.65,
+      "lastGracefulShutdown": false,
+      "lastHintSessionId": "b50b42ff-793f-4621-aa30-1662bde3d294",
+      "lastLinesAdded": 0,
+      "lastLinesRemoved": 0,
+      "lastModelUsage": {
+        "claude-haiku-4-5-20251001": {
+          "cacheCreationInputTokens": 0,
+          "cacheReadInputTokens": 0,
+          "costUSD": 0.000282,
+          "inputTokens": 252,
+          "outputTokens": 6,
+          "webSearchRequests": 0
+        }
+      },
+      "lastSessionFirstPrompt": "pos-ui这个项目云效有何合并，feat-964-lby合并到master-public，帮我同意合并，使用rebase",
+      "lastSessionId": "e76e139a-7731-46a3-9d6a-467d9e3177d4",
+      "lastSessionModified": 1778308691272,
+      "lastToolDuration": 0,
+      "lastTotalCacheCreationInputTokens": 0,
+      "lastTotalCacheReadInputTokens": 0,
+      "lastTotalInputTokens": 252,
+      "lastTotalOutputTokens": 6,
+      "lastTotalWebSearchRequests": 0,
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "projectOnboardingSeenCount": 0,
+      "reactVulnerabilityCache": {
+        "detected": false,
+        "package": null,
+        "packageManager": null,
+        "packageName": null,
+        "version": null
+      },
+      "disabledMcpServers": [
+        "github",
+        "chrome-devtools"
+      ]
+    },
+    "D:/work/sanyi-client": {
+      "allowedTools": [],
+      "disabledMcpjsonServers": [],
+      "enabledMcpjsonServers": [],
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "hasCompletedProjectOnboarding": true,
+      "hasTrustDialogAccepted": true,
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "projectOnboardingSeenCount": 0
+    },
+    "D:/work/sanyi-webview": {
+      "allowedTools": [],
+      "disabledMcpjsonServers": [],
+      "enabledMcpjsonServers": [],
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "hasCompletedProjectOnboarding": true,
+      "hasTrustDialogAccepted": true,
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "projectOnboardingSeenCount": 0
+    },
+    "D:/work/sanyi_app": {
+      "allowedTools": [],
+      "disabledMcpjsonServers": [],
+      "enabledMcpjsonServers": [],
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "hasCompletedProjectOnboarding": true,
+      "hasTrustDialogAccepted": true,
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "projectOnboardingSeenCount": 0
+    },
+    "D:/work/sanyi_lr_app": {
+      "allowedTools": [],
+      "disabledMcpjsonServers": [],
+      "enabledMcpjsonServers": [],
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "hasCompletedProjectOnboarding": true,
+      "hasTrustDialogAccepted": true,
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "projectOnboardingSeenCount": 0
+    },
+    "D:/work/sanyi_mall_ori": {
+      "allowedTools": [],
+      "disabledMcpjsonServers": [],
+      "enabledMcpjsonServers": [],
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "hasCompletedProjectOnboarding": true,
+      "hasTrustDialogAccepted": true,
+      "lastGracefulShutdown": false,
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "projectOnboardingSeenCount": 0,
+      "lastHintSessionId": "f52e70ec-44dd-4326-8a13-863ff3148178",
+      "lastSessionFirstPrompt": "还是找不到/mcp 对应的配置，C:\\Users\\Administrator\\.vscode\\.mcp.json已经有了",
+      "lastSessionModified": 1778293148157
+    },
+    "D:\\": {
+      "allowedTools": [],
+      "disabledMcpjsonServers": [],
+      "enabledMcpjsonServers": [],
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "hasTrustDialogAccepted": false,
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "projectOnboardingSeenCount": 0
+    },
+    "D:\\github\\football-analyse": {
+      "allowedTools": [],
+      "disabledMcpjsonServers": [],
+      "enabledMcpjsonServers": [],
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "hasTrustDialogAccepted": true,
+      "hasTrustDialogHooksAccepted": false,
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "projectOnboardingSeenCount": 1
+    },
+    "D:\\work\\huabing-frontend-publish": {
+      "allowedTools": [],
+      "disabledMcpjsonServers": [],
+      "enabledMcpjsonServers": [],
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "hasTrustDialogAccepted": true,
+      "hasTrustDialogHooksAccepted": false,
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "projectOnboardingSeenCount": 1
+    },
+    "D:/work/huabing-ui-ht": {
+      "allowedTools": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": 0,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "lastGracefulShutdown": false,
+      "disabledMcpServers": [
+        "chrome-devtools",
+        "github"
+      ],
+      "lastHintSessionId": "c30d977d-be59-4914-90da-5895a341c2fa",
+      "lastSessionFirstPrompt": "然后将master-dev合并到master-public,使用rebase",
+      "lastSessionModified": 1778294819667
+    }
+  },
+  "seenNotifications": {},
+  "shiftEnterKeyBindingInstalled": true,
+  "showSpinnerTree": false,
+  "skillUsage": {
+    "claude-hud:setup": {
+      "lastUsedAt": 1774848259388,
+      "usageCount": 2
+    },
+    "commit": {
+      "lastUsedAt": 1778051931343,
+      "usageCount": 3
+    },
+    "init": {
+      "lastUsedAt": 1778228188994,
+      "usageCount": 23
+    },
+    "layer2-requirement-analysis": {
+      "lastUsedAt": 1773642212470,
+      "usageCount": 1
+    },
+    "layer3-contract-definition": {
+      "lastUsedAt": 1773642595987,
+      "usageCount": 1
+    },
+    "layer4-red-tests": {
+      "lastUsedAt": 1773643751065,
+      "usageCount": 1
+    },
+    "layer5-green-implementation": {
+      "lastUsedAt": 1773644477726,
+      "usageCount": 1
+    },
+    "review": {
+      "lastUsedAt": 1778035064980,
+      "usageCount": 1
+    },
+    "vue-best-practices": {
+      "lastUsedAt": 1773384909175,
+      "usageCount": 1
+    },
+    "vue-debug-guides": {
+      "lastUsedAt": 1773368213993,
+      "usageCount": 1
+    },
+    "mcp__github__issue_to_fix_workflow": {
+      "usageCount": 1,
+      "lastUsedAt": 1778232136956
+    }
+  },
+  "sonnet1m45MigrationComplete": true,
+  "sonnet45MigrationComplete": true,
+  "subscriptionNoticeCount": 0,
+  "thinkingMigrationComplete": true,
+  "toolUsage": {
+    "AskUserQuestion": {
+      "lastUsedAt": 1774682223531,
+      "usageCount": 3
+    },
+    "Bash": {
+      "lastUsedAt": 1775019265259,
+      "usageCount": 927
+    },
+    "Edit": {
+      "lastUsedAt": 1774946577127,
+      "usageCount": 762
+    },
+    "EnterPlanMode": {
+      "lastUsedAt": 1774681643449,
+      "usageCount": 3
+    },
+    "ExitPlanMode": {
+      "lastUsedAt": 1774682312363,
+      "usageCount": 1
+    },
+    "Glob": {
+      "lastUsedAt": 1774945387622,
+      "usageCount": 334
+    },
+    "Grep": {
+      "lastUsedAt": 1775018439955,
+      "usageCount": 188
+    },
+    "Read": {
+      "lastUsedAt": 1775018694977,
+      "usageCount": 2017
+    },
+    "Skill": {
+      "lastUsedAt": 1774848259398,
+      "usageCount": 8
+    },
+    "Task": {
+      "lastUsedAt": 1774682087933,
+      "usageCount": 11
+    },
+    "TaskCreate": {
+      "lastUsedAt": 1774686654725,
+      "usageCount": 23
+    },
+    "TaskList": {
+      "lastUsedAt": 1772501139266,
+      "usageCount": 2
+    },
+    "TaskOutput": {
+      "lastUsedAt": 1774946709479,
+      "usageCount": 7
+    },
+    "TaskStop": {
+      "lastUsedAt": 1773205680036,
+      "usageCount": 2
+    },
+    "TaskUpdate": {
+      "lastUsedAt": 1774687797988,
+      "usageCount": 33
+    },
+    "WebSearch": {
+      "lastUsedAt": 1774346371773,
+      "usageCount": 9
+    },
+    "Write": {
+      "lastUsedAt": 1774945967079,
+      "usageCount": 315
+    },
+    "mcp__ide__getDiagnostics": {
+      "lastUsedAt": 1773381140335,
+      "usageCount": 11
+    }
+  },
+  "userID": "32531ec5cb23d2138eaaa7ad7cf822145d6586e44256e567e24d1328375031c9"
+}
