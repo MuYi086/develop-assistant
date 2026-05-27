@@ -114,6 +114,18 @@
     "jsdoc-best-practices": {
       "source": ".agents/skills/jsdoc-best-practices",
       "sourceType": "local"
+    },
+    "aihot": {
+      "source": ".agents/skills/aihot",
+      "sourceType": "local"
+    },
+    "hv-analysis": {
+      "source": ".agents/skills/hv-analysis",
+      "sourceType": "local"
+    },
+    "neat-freak": {
+      "source": ".agents/skills/neat-freak",
+      "sourceType": "local"
     }
   },
   "sandbox": {
