@@ -142,6 +142,10 @@
     "huabing-mini-vue2-request-store-flow": {
       "source": ".agents/skills/huabing-mini-vue2-request-store-flow",
       "sourceType": "local"
+    },
+    "huabing-mini-vue2-feature-scaffold": {
+      "source": ".agents/skills/huabing-mini-vue2-feature-scaffold",
+      "sourceType": "local"
     }
   },
   "sandbox": {

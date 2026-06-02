@@ -1,22 +1,31 @@
 ---
 name: huabing-mini-vue2-ordering-business-flow
-description: "话饼点餐、购物车、确认订单、支付、取餐和烹饪业务流技能。用于修改 shop/cart、用餐方式、一键加购、确认订单、优惠方式、价格计算、钱包和原生支付、会员开通、订单详情、pickUpWay 路由、二维码轮询、WebSocket 订单状态和烹饪流程。"
+description: 话饼点餐、购物车、确认订单、支付、取餐和烹饪业务流技能。用于修改 shop/cart、用餐方式、一键加购、确认订单、优惠方式、价格计算、钱包和原生支付、会员开通、订单详情、pickUpWay 路由、二维码轮询、WebSocket 订单状态和烹饪流程。
 ---
 
 # 话饼点餐业务流
 
-## 先追踪业务闭环
+## 快速入口
 
-点餐相关改动先读对应闭环，不只看单个页面：
+改点餐、购物车、确认订单、支付、订单详情、取餐或烹饪前，先按闭环读这些文件：
 
-- 点餐和购物车：`src/pagesA/shop/shop.vue`、`src/store/modules/shop.js`
-- 确认订单：`src/pagesF/orderConfirm/orderConfirm.vue`、`src/store/modules/orderConfirm.js`
-- 钱包和会员：`src/store/modules/wallet.js`、`src/store/modules/vip.js`
-- 支付结果：`src/pagesG/nativePayResult/nativePayResult.vue`、`src/pagesG/walletPayResult/walletPayResult.vue`
-- 订单详情：`src/pagesF/orderDetail/orderDetail.vue`、`src/store/modules/orderDetail.js`
-- 烹饪：`src/pagesD/cook/cook.vue`、`src/store/modules/cook.js`
-- 新详情族：`comboDetailV2`、`singleGoodsDetailV2`、`noodlesGoodsDetail`
-- 公共业务工具：`src/utils/util.js`
+- `src/pagesA/shop/shop.vue`
+- `src/store/modules/shop.js`
+- `src/pagesF/orderConfirm/orderConfirm.vue`
+- `src/store/modules/orderConfirm.js`
+- `src/pagesF/orderDetail/orderDetail.vue`
+- `src/store/modules/orderDetail.js`
+- `src/pagesD/cook/cook.vue`
+- `src/store/modules/cook.js`
+- `src/utils/util.js`
+
+当任务涉及钱包、会员、支付结果页、取餐路由矩阵、新旧详情族或 WebSocket 事件来源时，再读 `references/source-map.md`。
+
+## 协同规则
+
+- 新增或改接口时，先按请求状态流 skill 维护 `api_*.js`、`api/index.js` 和 Vuex action。
+- 改弹窗、按钮、购物车浮层或详情页 UI 时，同时按跨端 UI skill 检查 props/events、条件编译和样式。
+- 点餐业务页不要直接重写基础请求、支付封装、WebSocket 连接或全局路由生成逻辑。
 
 ## 购物车规则
 
@@ -54,16 +63,13 @@ description: "话饼点餐、购物车、确认订单、支付、取餐和烹饪
 - `bindQuickAddGoodsAttr`
 - `bindResetOfferParams`
 
-## 优惠和价格
+## 价格、优惠和用餐方式
 
 - 优惠方式是有状态流程：当前选中、上次备份、弹窗预备项要分开。
 - 从优惠券页、老人优惠 WebView、支付方式弹窗返回后，先判断是否应该保留旧选择，再重新算价。
 - 需要避免自动选中第一种优惠时，使用对应的 not-auto-select action。
 - 后端返回预估价为空或哨兵值时，遵循现有隐藏规则。
 - 钱包支付渠道依赖 `pricePayable`，先算价再查支付渠道。
-
-## 用餐方式
-
 - 用餐方式是订单语义，不只是 UI 状态。
 - 三代机相关接口要追加 `diningWay`、`peopleNum` 或自动加购信息。
 - 创建订单时如果 `diningWay` 为 `RESERVATION`，按既有逻辑转为 `IN_SITE`。
@@ -78,14 +84,7 @@ description: "话饼点餐、购物车、确认订单、支付、取餐和烹饪
 - `util.commonGoToCook(item, jumpType)`
 - `util.pickUpTypeJumpTo(item, method, jumpType)`
 
-按 `pickUpWay` 和 `orderVer` 分发：
-
-- `MACHINE_TAKE_MEAL` -> 单品详情或单品烹饪。
-- `PACKAGE_PICKUP` -> 套餐详情或套餐烹饪。
-- `NOODLE_SOUP_PICKUP` -> 面条详情或面条烹饪。
-- `AUTOMATIC_DELIVERY` -> 按 `orderVer` 进入自动发放详情 v1/v2。
-- `SELF_PICKUP_VERIFICATION` -> 点位自提详情。
-- 快递、同城、外卖、盲盒等 -> 订单详情 v1/v2 和普通烹饪页。
+需要改 `pickUpWay`、`orderVer` 或新增取餐类型时，先读 `references/source-map.md` 的路由矩阵和 `src/utils/util.js` 对应函数。
 
 ## 烹饪和轮询
 
@@ -105,22 +104,10 @@ description: "话饼点餐、购物车、确认订单、支付、取餐和烹饪
 - 用 `uni.$emit` 发事件，不直接耦合到具体页面。
 - 组件销毁或 store 标志关闭时关闭 socket 并清理心跳和重连 timer。
 
-## 验证清单
+## 校验
 
 - 购物车改动同时测登录和未登录。
 - 支付参数改动至少检查原生支付和钱包支付。
 - 优惠相关改动检查优惠券页和 WebView 返回后的 `onShow`。
 - 烹饪和订单详情改动检查离开页面后 timer 是否停止。
 - 新订单类型必须检查 `orderVer`、`pickUpWay` 和订单列表入口。
-
-## 参考文件
-
-- `src/pagesA/shop/shop.vue`
-- `src/store/modules/shop.js`
-- `src/pagesF/orderConfirm/orderConfirm.vue`
-- `src/store/modules/orderConfirm.js`
-- `src/pagesD/cook/cook.vue`
-- `src/store/modules/cook.js`
-- `src/pagesF/orderDetail/orderDetail.vue`
-- `src/components/global-web-socket/global-web-socket.vue`
-- `src/utils/util.js`

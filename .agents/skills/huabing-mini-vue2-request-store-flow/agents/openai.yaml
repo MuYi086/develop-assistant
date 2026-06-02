@@ -1,0 +1,4 @@
+interface:
+  display_name: "话饼请求状态流"
+  short_description: "维护 API、请求封装、Vuex 和持久化"
+  default_prompt: "Use $huabing-mini-vue2-request-store-flow 维护话饼小程序 API、请求链路、Vuex 模块或持久化逻辑。"

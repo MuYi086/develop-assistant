@@ -35,6 +35,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 │   huabing-mini-vue2-cross-platform-ui/   # 跨端 UI 组件、uv-ui 二次封装
 │   huabing-mini-vue2-ordering-business-flow/ # 点餐/购物车/支付/订单业务流
 │   huabing-mini-vue2-request-store-flow/  # 请求链路、API、Vuex 状态流
+│   huabing-mini-vue2-feature-scaffold/    # 新需求脚手架（页面/路由/API/Store 骨架）
 ├── 基础设施
 │   skill-creator/                  # 元技能：创建/优化其他技能
 │   jsdoc-best-practices/           # JSDoc 注释规范
@@ -85,6 +86,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | `huabing-mini-vue2-cross-platform-ui` | hb-\* 组件、uv-ui 封装、跨端兼容问题 |
 | `huabing-mini-vue2-ordering-business-flow` | 点餐/购物车/支付/订单/烹饪业务修改 |
 | `huabing-mini-vue2-request-store-flow` | API 接口、请求封装、Vuex 状态管理修改 |
+| `huabing-mini-vue2-feature-scaffold` | 新需求脚手架生成（新建页面/路由/API/Store） |
 
 ## Git 工作流
 
