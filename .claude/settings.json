@@ -126,6 +126,22 @@
     "neat-freak": {
       "source": ".agents/skills/neat-freak",
       "sourceType": "local"
+    },
+    "huabing-mini-vue2-core-workflow": {
+      "source": ".agents/skills/huabing-mini-vue2-core-workflow",
+      "sourceType": "local"
+    },
+    "huabing-mini-vue2-cross-platform-ui": {
+      "source": ".agents/skills/huabing-mini-vue2-cross-platform-ui",
+      "sourceType": "local"
+    },
+    "huabing-mini-vue2-ordering-business-flow": {
+      "source": ".agents/skills/huabing-mini-vue2-ordering-business-flow",
+      "sourceType": "local"
+    },
+    "huabing-mini-vue2-request-store-flow": {
+      "source": ".agents/skills/huabing-mini-vue2-request-store-flow",
+      "sourceType": "local"
     }
   },
   "sandbox": {

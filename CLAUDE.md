@@ -30,6 +30,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 │   theme-factory/                  # 主题系统（幻灯片、文档等）
 │   web-design-engineer/            # Web 设计工程
 │   architecture-diagram/           # 架构图生成
+├── 话饼 Huabing (Vue 2 UniApp)
+│   huabing-mini-vue2-core-workflow/       # 核心工作流、项目结构、路由、跨端约束
+│   huabing-mini-vue2-cross-platform-ui/   # 跨端 UI 组件、uv-ui 二次封装
+│   huabing-mini-vue2-ordering-business-flow/ # 点餐/购物车/支付/订单业务流
+│   huabing-mini-vue2-request-store-flow/  # 请求链路、API、Vuex 状态流
 ├── 基础设施
 │   skill-creator/                  # 元技能：创建/优化其他技能
 │   jsdoc-best-practices/           # JSDoc 注释规范
@@ -76,6 +81,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | `aihot` | 查询 AI 资讯/日报/热点（"AI 圈"、"今天 AI 有什么"） |
 | `hv-analysis` | 深度研究分析（"研究一下XX"、"竞品分析"） |
 | `neat-freak` | 文档/记忆同步整理（"整理一下"、"/sync"） |
+| `huabing-mini-vue2-core-workflow` | 话饼项目结构、路由、模板生成、跨端约束相关问题 |
+| `huabing-mini-vue2-cross-platform-ui` | hb-\* 组件、uv-ui 封装、跨端兼容问题 |
+| `huabing-mini-vue2-ordering-business-flow` | 点餐/购物车/支付/订单/烹饪业务修改 |
+| `huabing-mini-vue2-request-store-flow` | API 接口、请求封装、Vuex 状态管理修改 |
 
 ## Git 工作流
 
