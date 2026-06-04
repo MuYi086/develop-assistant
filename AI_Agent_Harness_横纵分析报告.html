@@ -1,0 +1,380 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>AI Agent Harness 横纵分析报告</title><style>
+@page { size: A4; margin: 20mm 18mm 18mm; }
+body { font-family: "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif; color: #24313d; font-size: 14px; line-height: 1.78; max-width: 900px; margin: 0 auto; padding: 24px 18px 60px; }
+h1 { font-size: 30px; color: #17324d; border-bottom: 3px solid #2f6f73; padding-bottom: 16px; margin: 0 0 22px; }
+h2 { font-size: 22px; color: #194f4f; margin: 34px 0 12px; break-after: avoid; }
+h3 { font-size: 18px; color: #724b18; margin: 26px 0 8px; break-after: avoid; }
+p { margin: 0 0 11px; text-align: justify; }
+blockquote { margin: 12px 0 18px; padding: 10px 14px; border-left: 4px solid #2f6f73; background: #eef5f4; color: #44515d; }
+ul, ol { margin: 8px 0 14px 24px; padding: 0; }
+li { margin: 5px 0; }
+a { color: #155fa0; text-decoration: none; word-break: break-all; }
+code { background: #eef1f4; padding: 1px 4px; border-radius: 3px; }
+strong { color: #152b3f; }
+table { width: 100%; border-collapse: collapse; margin: 12px 0 18px; font-size: 13px; }
+th, td { border: 1px solid #d8e0e3; padding: 8px 10px; vertical-align: top; }
+th { background: #2f6f73; color: #fff; text-align: left; }
+tr:nth-child(even) td { background: #f7faf9; }
+</style></head><body>
+<h1>AI Agent Harness 横纵分析报告</h1>
+<blockquote>研究时间：2026-06-04 | 研究对象：AI Agent Harness | 类型：工程范式 / 运行时基础设施 | 主要语境：AI Agent 工程化、Coding Agent、企业级治理与安全</blockquote>
+
+<h2>一、一句话定义</h2>
+<p>AI Agent Harness，是包在模型外面的那套工程外壳：它给模型工具、上下文、记忆、状态、沙箱、权限、反馈、验证和观测能力，让一个只会输出文本的模型变成能在真实环境里持续行动、可检查、可纠错、可治理的 Agent。</p>
+<p>更短一点说：模型负责“想”，Harness 负责“让它在一个可控世界里做事”。</p>
+<p>这个定义里最重要的不是“工具调用”，而是“可控世界”。很多团队第一次做 Agent，会把 Harness 简化成一个 <code>while</code> 循环加几个 function calling。这个东西能跑 demo，却很难承受生产环境。真实任务里，Agent 会遇到上下文超长、工具失败、状态漂移、权限边界、恶意输入、依赖安装、文件冲突、回滚、审计、人工审批这些问题。Harness 要解决的，正是这些模型本体不擅长、也不应该完全交给模型自由处理的问题。</p>
+<p>所以，AI Agent Harness 不是一个单独产品，也不是某个 SDK 的专有名词。它更像一个工程层级：</p>
+<ul>
+<li>下限是工具调用循环和任务运行环境。</li>
+<li>中间层是状态、记忆、编排、验证、日志、错误恢复。</li>
+<li>上限是组织级治理系统：标准、模板、权限、审计、评测、持续改进机制。</li>
+</ul>
+<p>我对它的判断是：<strong>Agent 真正进入生产后，竞争重点会从“谁会写 prompt”转向“谁能设计稳定的 Harness”。</strong></p>
+
+<h2>二、纵向分析：它是怎么长出来的</h2>
+<h3>1. 起点不是新概念，而是软件工程里的 Test Harness</h3>
+<p>Harness 这个词在软件工程里并不新。传统 test harness 指一套包住被测代码的测试环境：准备输入、启动程序、观察输出、收集结果、判断通过与否。它的重点不是替代码“思考”，而是让代码在可复现的环境里被验证。</p>
+<p>AI Agent Harness 继承了这个直觉。</p>
+<p>早期研究语境里，“agent harness”更多指评测框架。给 Agent 一个浏览器、终端、网页环境或代码仓库，让它按固定任务运行，再用评分器判断成功率。SWE-bench、AgentBench、WebArena、OSWorld、Terminal-Bench 这些 benchmark 的背后，都离不开任务初始化、环境隔离、动作执行、结果采集和评分模块。</p>
+<p>这时的 Harness 主要回答一个问题：<strong>如何公平、可复现地测试 Agent？</strong></p>
+<p>但这个问题很快外溢到了生产现场。因为一旦 Agent 不只是被测试，而是要真正在代码仓库、业务系统、浏览器、数据库、云环境里行动，测试环境里的那些问题就变成运行环境的问题。环境初始化、动作边界、工具失败、结果验证、轨迹记录，不再只是 benchmark 的组件，而是生产 Agent 的生命线。</p>
+
+<h3>2. 2023 年：AutoGPT / BabyAGI 让基础设施问题暴露出来</h3>
+<p>2023 年前后，AutoGPT、BabyAGI 这类早期自主 Agent 项目让很多人第一次看到“模型 + 工具 + 记忆 + 任务队列”的想象力。它们能拆任务、查资料、写文件、循环执行，看起来像是自动化的雏形。</p>
+<p>但它们也把失败模式暴露得很彻底：</p>
+<ul>
+<li>执行失控：Agent 在不该继续时继续。</li>
+<li>上下文爆炸：历史记录越来越大，模型抓不住重点。</li>
+<li>状态丢失：上一步做过什么、为什么做，下一步未必记得住。</li>
+<li>工具误用：会调用工具，但不理解工具边界。</li>
+<li>验证薄弱：看起来完成了，实际没有证明完成。</li>
+<li>副作用不可控：文件、网络、API、账号权限都可能被误触。</li>
+</ul>
+<p>这些失败说明，Agent 的瓶颈并不总是模型智力。很多时候，瓶颈是模型外面的系统太薄。</p>
+<p>这也是 Harness 思想真正开始成形的土壤：当模型越来越能行动，工程师不能只问“怎么让它更聪明”，还要问“它行动的世界是不是足够清晰、足够安全、足够可恢复”。</p>
+
+<h3>3. 2024-2025 年：工具协议、上下文工程和 Coding Agent 把 Harness 推到台前</h3>
+<p>2024 年以后，MCP、function calling、结构化输出、浏览器控制、代码执行沙箱、长上下文、RAG、记忆系统开始成熟。模型可以连接文件、数据库、搜索引擎、设计稿、GitHub、业务 API，也可以在沙箱里运行命令和修改代码。</p>
+<p>这带来一个变化：Agent 的能力不再只取决于模型，还取决于“给它接了什么、怎么接、接入以后怎么约束”。</p>
+<p>Context Engineering 在这个阶段变得重要。它解决的是模型每一步应该看到什么：哪些文档进入上下文，哪些历史需要摘要，哪些工具描述应该暴露，哪些记忆应该读取，哪些大输出应该落盘而不是塞满窗口。</p>
+<p>但 Context Engineering 仍然不够。因为 Agent 不只是“看信息”，还要“做动作”。一旦动作有副作用，系统就要处理权限、审批、执行环境、验证、回滚和审计。</p>
+<p>这就是从 Context Engineering 走向 Harness Engineering 的关键转折。</p>
+
+<h3>4. 2026 年 2 月：Mitchell Hashimoto 把实践命名</h3>
+<p>2026-02-05，Mitchell Hashimoto 发布《My AI Adoption Journey》。他在文中把自己的 AI 使用路径拆成六步，其中第五步叫 “Engineer the Harness”。</p>
+<p>他的核心观点很朴素：每当 Agent 犯一个错误，不要只在对话里纠正它，而是花时间做一个工程化修复，让它以后尽量不再犯同类错误。这个修复可能是一条 <code>AGENTS.md</code> 规则，也可能是一个截图脚本、测试脚本、命令封装、检查工具。</p>
+<p>这句话之所以有分量，是因为它把“用 AI”从技巧变成了积累。</p>
+<p>如果你只是每次手工提醒 Agent，它下一次仍然可能忘。若你把失败沉淀成规则、脚本和检查，那么每一次失败都会让后续 Agent 更好用。Harness 不是一次性搭好，而是像代码库一样持续演化。</p>
+<p>这个思路和你的 <code>develop-assistant</code> 项目很接近：项目里的 <code>AGENTS.md</code>、<code>.agents/skills</code>、权限规则、MCP 配置，本质上就是在把你的工作偏好、项目约束和高频经验沉淀成 Agent 可复用的外部结构。</p>
+
+<h3>5. 2026 年 2 月：OpenAI 用 Codex 实践把它推成行业话题</h3>
+<p>2026-02-11，OpenAI 发布《Harness engineering: leveraging Codex in an agent-first world》。文章描述了一个约五个月的内部实验：团队用 Codex 构建并交付一个内部 beta 产品，约百万行代码，人的工作重心不是直接手写代码，而是设计让 Codex 能持续产出、修复和维护代码的环境。</p>
+<p>这篇文章真正有价值的地方，不是“AI 写了多少代码”，而是它展示了人类工程师角色的迁移：</p>
+<ul>
+<li>从直接写实现，转向定义目标和边界。</li>
+<li>从手工修所有问题，转向把质量原则写进仓库。</li>
+<li>从一次性审查，转向持续的质量扫描和小步清理。</li>
+<li>从相信生成结果，转向构建可重复的验证和反馈循环。</li>
+</ul>
+<p>OpenAI 的一个重要判断是：软件工程仍然需要纪律，只是纪律越来越多地体现在脚手架、抽象和反馈循环里，而不只是体现在手写代码里。</p>
+<p>这正是 Harness Engineering 的精神内核。</p>
+
+<h3>6. 2026 年 3-4 月：LangChain、Thoughtworks / Martin Fowler 把概念体系化</h3>
+<p>LangChain 在 2026-03-10 的文章里明确提出：<code>Agent = Model + Harness</code>，并给出一个非常宽的定义：如果你不是模型，你就是 Harness。系统提示、工具、Skills、MCP、文件系统、沙箱、编排逻辑、hooks、中间件，都属于 Harness。</p>
+<p>这个定义的好处是足够清楚：模型本体和模型之外的工程结构被切开了。</p>
+<p>Thoughtworks 的 Birgitta Böckeler 在 Martin Fowler 网站上进一步把 Harness 拆成两组控制：</p>
+<ul>
+<li>Guides：前馈控制，提前引导 Agent，比如规范、原则、参考文档、Skills、模板、架构约束。</li>
+<li>Sensors：反馈控制，在 Agent 行动后观察结果并帮助它修正，比如测试、lint、类型检查、浏览器截图、日志、AI review、线上指标。</li>
+</ul>
+<p>她还把控制分成两类：</p>
+<ul>
+<li>Computational：确定性、快速、便宜，如测试、静态分析、结构约束。</li>
+<li>Inferential：语义判断、AI review、LLM-as-judge，成本更高，也更不确定。</li>
+</ul>
+<p>这个框架很实用。很多团队会过度投资 Guides，比如写很长的规则文档，却忽视 Sensors。结果 Agent 读了很多规则，仍然不知道自己错了。真正稳定的 Harness 必须同时有“做之前的引导”和“做之后的反馈”。</p>
+
+<h3>7. 2026 年 4 月以后：Harness 产品化和研究化同时发生</h3>
+<p>2026-04-15，OpenAI 更新 Agents SDK，明确提到 model-native harness、native sandbox execution、MCP、Skills、AGENTS.md、shell、apply patch、文件工具、可恢复执行等能力。这说明 Harness 正在从“团队自己粘起来的胶水代码”，变成模型厂商和框架厂商提供的标准能力。</p>
+<p>研究侧也在推进。AHE、VeRO、Life-Harness、Polar 等论文开始把 Harness 当成可优化对象，而不是固定背景：</p>
+<ul>
+<li>AHE 研究如何通过可观测性自动演化 coding-agent harness。</li>
+<li>VeRO 把 harness optimization 作为 coding agent 的目标任务。</li>
+<li>Life-Harness 研究不改模型权重，只改模型与环境之间的接口。</li>
+<li>Polar 把任意 Agent Harness 当黑盒，记录轨迹并服务于强化学习。</li>
+</ul>
+<p>这说明行业已经进入一个新阶段：Harness 不只是“写点脚本”，而是可以被测量、被版本化、被自动优化、被迁移的工程资产。</p>
+
+<h2>三、横向分析：它和相邻概念到底差在哪</h2>
+<h3>1. Harness vs Prompt Engineering</h3>
+<p>Prompt Engineering 解决的是“怎么说”。Harness Engineering 解决的是“让它在什么结构里做事”。</p>
+<p>如果 Agent 总是忘记运行测试，prompt 可以写“请记得运行测试”。但 Harness 更好的做法是：提供明确的测试命令、在任务完成前自动触发测试、失败时把错误反馈给 Agent、必要时阻止提交。</p>
+<p>prompt 是软约束，Harness 可以把软约束变成硬流程。</p>
+<p>这不是说 prompt 不重要。系统提示、工具描述、任务说明都是 Harness 的一部分。但如果一个团队把所有控制都寄托在 prompt 上，那它其实没有真正的 Harness，只是有一段很长的说明书。</p>
+
+<h3>2. Harness vs Context Engineering</h3>
+<p>Context Engineering 关注“模型看见什么”。Harness Engineering 包含 Context Engineering，但不止于此。</p>
+<p>一个成熟 Harness 会管理上下文：</p>
+<ul>
+<li>哪些项目规则在启动时加载。</li>
+<li>哪些 Skills 通过渐进披露加载。</li>
+<li>哪些工具输出需要截断或落盘。</li>
+<li>历史对话如何压缩。</li>
+<li>长期记忆何时写入、何时读取。</li>
+</ul>
+<p>但 Harness 还会管理行动：</p>
+<ul>
+<li>哪些命令能执行。</li>
+<li>哪些文件能改。</li>
+<li>哪些 API 需要审批。</li>
+<li>哪些工具调用要记录。</li>
+<li>失败后如何重试或恢复。</li>
+<li>完成后如何验证。</li>
+</ul>
+<p>所以，Context Engineering 更像 Harness 的“信息流设计”，而 Harness Engineering 是完整的“行动系统设计”。</p>
+
+<h3>3. Harness vs Agent Framework / SDK</h3>
+<p>OpenAI Agents SDK、LangGraph、Claude Agent SDK、CrewAI、AutoGen、Semantic Kernel 这些是构建 Harness 的工具，不等于你的 Harness 本身。</p>
+<p>框架提供通用能力：模型调用、工具注册、状态图、handoff、trace、memory、guardrails。你的 Harness 还需要把这些能力和具体业务结合起来：</p>
+<ul>
+<li>你的数据源是什么。</li>
+<li>你的权限边界在哪里。</li>
+<li>你的业务规则怎么表达。</li>
+<li>你的评测集怎么设计。</li>
+<li>你的失败案例怎么沉淀。</li>
+<li>你的人工审批流程怎么接入。</li>
+</ul>
+<p>很多团队的问题是“买了框架，以为有了 Harness”。实际上，框架只是骨架，真正的 Harness 是你围绕场景做出的约束、工具、反馈和治理。</p>
+
+<h3>4. Harness vs Runtime / Sandbox</h3>
+<p>Runtime 和 Sandbox 是 Harness 的执行层。</p>
+<p>一个 Agent 可以在本机 shell、Docker、云沙箱、浏览器、远程 workspace、托管容器里执行任务。沙箱解决的是安全执行和环境隔离：文件放在哪里，命令在哪里跑，依赖怎么装，网络是否开放，密钥是否隔离，容器失败后能否恢复。</p>
+<p>OpenAI 2026-04 的 Agents SDK 更新强调“把 harness 和 compute 分开”，背后的安全逻辑很明确：模型生成的代码不应该直接拿到生产凭据；Agent 状态应该外部化，这样容器挂了也能从 checkpoint 恢复。</p>
+<p>所以 Sandbox 很重要，但它只是 Harness 的一层。没有任务规则、工具边界、验证和审计的沙箱，只是一个更安全的执行盒子，还不是完整 Harness。</p>
+
+<h3>5. Harness vs Eval Harness</h3>
+<p>Eval Harness 是 Harness 的一个分支，重点在评测。</p>
+<p>它通常包括任务集、环境初始化、执行循环、评分器、统计报告。它回答“这个 Agent 在这些任务上表现如何”。生产 Harness 要回答的问题更宽：“这个 Agent 在真实业务里能不能稳定、安全、可恢复地工作”。</p>
+<p>两者会互相融合。优秀的生产 Harness 会把真实失败案例沉淀成评测集；优秀的 Eval Harness 会暴露生产 Harness 需要补强的工具、记忆、权限和反馈机制。</p>
+<p>在 coding agent 场景里，这个融合尤其明显。SWE-bench、Terminal-Bench 这类任务不只是模型能力测试，也在测试 Harness 的文件操作、shell 使用、错误恢复、上下文管理和验证策略。</p>
+
+<h3>6. Harness vs MCP</h3>
+<p>MCP 是标准化连接外部系统的协议，Harness 是决定如何使用这些连接的完整环境。</p>
+<p>MCP 像一个接口标准，让 AI 应用连接文件、数据库、搜索、设计工具、业务系统。它降低了工具接入成本，也让工具生态更可复用。</p>
+<p>但 MCP 本身不会替你解决治理问题。一个 Harness 需要决定：</p>
+<ul>
+<li>哪些 MCP server 可以被加载。</li>
+<li>工具描述是否可信。</li>
+<li>是否需要 allowlist。</li>
+<li>哪些工具调用需要审批。</li>
+<li>工具输出是否可能包含 prompt injection。</li>
+<li>工具调用轨迹如何审计。</li>
+</ul>
+<p>MCP 让 Agent 更有能力，也扩大了攻击面。Harness 必须承担信任边界。</p>
+
+<h3>7. Harness vs Observability / LLMOps</h3>
+<p>Observability 是 Harness 的传感器系统。</p>
+<p>没有 trace，Agent 失败后只能猜：是模型没理解？工具坏了？上下文缺失？权限不够？重试策略错误？还是业务规则本来就不清楚？</p>
+<p>成熟 Harness 至少应该记录：</p>
+<ul>
+<li>用户目标和最终结果。</li>
+<li>每次模型调用。</li>
+<li>工具调用参数和返回。</li>
+<li>文件变更和命令输出。</li>
+<li>token、成本和耗时。</li>
+<li>失败点、重试和人工介入。</li>
+<li>测试和验收结果。</li>
+</ul>
+<p>观测不是为了炫酷 dashboard，而是为了让 Harness 可以迭代。没有可观察性，就没有真正的 Harness Engineering。</p>
+
+<h2>四、当前生态图谱</h2>
+<table>
+<thead><tr><th>层级</th><th>代表组件</th><th>解决的问题</th></tr></thead>
+<tbody>
+<tr><td>模型层</td><td>GPT、Claude、Gemini、Qwen、DeepSeek 等</td><td>推理、生成、规划、代码、语言理解</td></tr>
+<tr><td>Agent SDK / 框架</td><td>OpenAI Agents SDK、LangGraph、CrewAI、AutoGen、Semantic Kernel</td><td>工具调用、状态机、handoff、多 Agent、trace</td></tr>
+<tr><td>协议层</td><td>MCP、function calling、OpenAPI、A2A</td><td>外部工具、数据源、服务互操作</td></tr>
+<tr><td>执行层</td><td>本机 shell、Docker、E2B、Daytona、Modal、Runloop、Vercel / Cloudflare 沙箱</td><td>文件、命令、依赖、隔离、恢复</td></tr>
+<tr><td>上下文层</td><td>RAG、memory、Skills、AGENTS.md、知识库、摘要压缩</td><td>让模型看到正确材料</td></tr>
+<tr><td>验证层</td><td>test、lint、typecheck、Playwright、benchmark、LLM-as-judge</td><td>判断输出是否可靠</td></tr>
+<tr><td>观测层</td><td>LangSmith、Langfuse、AgentOps、OpenTelemetry、日志和事件流</td><td>追踪轨迹、定位失败、控制成本</td></tr>
+<tr><td>治理层</td><td>权限、审批、secret broker、审计、策略引擎、风险评分</td><td>控制副作用和合规风险</td></tr>
+</tbody>
+</table>
+<p>真正的 Harness 往往不是单层产品，而是这些层级的组合。不同场景需要的组合不同：</p>
+<ul>
+<li>Coding Agent 重视文件系统、shell、测试、代码审查、git 工作流。</li>
+<li>企业知识助手重视 RAG、权限继承、引用溯源、审计。</li>
+<li>业务流程 Agent 重视工具 allowlist、审批、幂等、事务和回滚。</li>
+<li>浏览器 Agent 重视持久登录态、页面观测、DOM/截图反馈和防注入。</li>
+<li>多 Agent 系统重视任务隔离、通信协议、共享状态和级联失败控制。</li>
+</ul>
+
+<h2>五、横纵交汇洞察</h2>
+<h3>1. Harness 火起来，不是因为模型不重要，而是因为模型已经足够能行动</h3>
+<p>如果模型只能聊天，Harness 的价值有限。你最多需要一个聊天 UI 和历史记录。</p>
+<p>当模型能读文件、跑命令、改代码、查网页、调用 API、管理任务、协作多个子 Agent，问题就变了。模型越能行动，外部结构越重要。一个能力强但边界不清的 Agent，比一个能力弱的聊天机器人风险更大。</p>
+<p>这就是 2026 年 Harness 话题爆发的原因：模型能力跨过了“能做事”的门槛，工程系统被迫补课。</p>
+
+<h3>2. 最好的 Harness 不是给 Agent 更多自由，而是减少无意义自由</h3>
+<p>很多人误解 Agent 自主性，以为越自主越先进。真实工程里，自主性要和可控性配套。</p>
+<p>好的 Harness 会缩小 Agent 的无效搜索空间：</p>
+<ul>
+<li>规定项目结构，而不是让它猜。</li>
+<li>提供标准命令，而不是让它乱试。</li>
+<li>给出业务术语表，而不是让它编。</li>
+<li>用类型、测试、lint、schema 限制输出。</li>
+<li>把高风险动作放到审批节点。</li>
+</ul>
+<p>这不是削弱模型，而是让模型把算力用在真正需要判断的地方。</p>
+
+<h3>3. Guides 和 Sensors 必须成对出现</h3>
+<p>只有 Guides，Agent 会“读了很多规则但不知道自己错没错”。只有 Sensors，Agent 会“反复撞墙再修”。两者组合才形成真正的控制循环。</p>
+<p>对 coding agent 来说：</p>
+<ul>
+<li><code>AGENTS.md</code>、Skills、架构文档是 Guides。</li>
+<li>build、test、lint、Playwright、代码审查是 Sensors。</li>
+</ul>
+<p>对业务 Agent 来说：</p>
+<ul>
+<li>SOP、字段字典、权限说明、业务规则是 Guides。</li>
+<li>审批结果、API 返回、用户反馈、异常日志、任务成功率是 Sensors。</li>
+</ul>
+<p>Harness Engineering 的日常工作，就是不断问：这个失败应该加 Guide，还是加 Sensor，还是两者都加？</p>
+
+<h3>4. 文件系统重新变成 Agent 的协作界面</h3>
+<p>LangChain 把文件系统视为 Harness 的基础组件，这点很关键。</p>
+<p>文件系统让 Agent 能把中间结果落盘，能跨会话保留状态，能让多 Agent 和人共享上下文。<code>AGENTS.md</code>、计划文件、任务清单、评测集、错误案例、脚本、日志，都是 Agent 与人协作的结构化表面。</p>
+<p>你的 <code>develop-assistant</code> 项目就是这个方向的例子。它不是一个应用，而是一套本地技能和项目记忆。它的价值不在运行一个服务，而在于让后续 Agent 进入项目时有更好的初始条件。</p>
+<p>从这个角度看，技能库、项目规则和脚本不是“文档杂物”，而是 Harness 资产。</p>
+
+<h3>5. 安全问题不能靠“请不要作恶”解决</h3>
+<p>Agent Harness 的安全核心是限制后果，而不是相信模型永远听话。</p>
+<p>OWASP 把 prompt injection、insecure plugin design、excessive agency 等列为 LLM 应用关键风险。Agentic AI Top 10 又进一步强调目标劫持、工具滥用、身份权限滥用、上下文污染、级联失败、不可追踪等问题。</p>
+<p>这意味着生产 Harness 至少要有几条底线：</p>
+<ul>
+<li>工具最小权限。</li>
+<li>高风险动作审批。</li>
+<li>密钥不进入模型可写环境。</li>
+<li>外部内容视为不可信。</li>
+<li>工具描述和 MCP server 需要信任治理。</li>
+<li>每个动作可审计。</li>
+<li>能回滚或补偿副作用。</li>
+</ul>
+<p>这不是保守，而是 Agent 能进入真实系统的前提。</p>
+
+<h3>6. Harness 会变成团队能力，而不是个人技巧</h3>
+<p>Prompt 可以是个人技巧，Harness 更像团队资产。</p>
+<p>一个人的提示词经验很难稳定传递给团队。一个写进仓库的 <code>AGENTS.md</code>、一个测试脚本、一个评测集、一个权限策略、一个错误归因模板，可以被所有 Agent 和所有人复用。</p>
+<p>这也是 Harness Engineering 对资深工程师更友好的地方。它要求的不是“会不会调某个工具”，而是能不能把经验外化成结构：规范、脚本、模板、检查、评估和流程。</p>
+<p>这和架构师、测试负责人、DevOps、平台工程师的能力很接近。</p>
+
+<h2>六、未来三种剧本</h2>
+<h3>剧本 A：最可能的走向，Harness 成为 Agent 应用标配</h3>
+<p>未来两三年，大部分严肃 Agent 应用都会默认包含 Harness 层。哪怕团队不叫这个名字，也会做同样的事：工具治理、状态管理、沙箱执行、评测集、trace、人工审批、回滚机制。</p>
+<p>在这个剧本里，Agent 框架会继续收敛，MCP 和 Skills 这类标准化能力会普及，但真正拉开差距的是场景 Harness：谁更懂自己的业务规则，谁有更好的测试集，谁能把失败变成可复用约束。</p>
+<p>对工程师来说，学习重点不是追每个 Agent 框架的 API，而是掌握 Harness 的通用构造：工具边界、上下文设计、验证信号、权限模型、错误恢复、观测闭环。</p>
+
+<h3>剧本 B：最危险的走向，Harness 被过度包装成复杂框架</h3>
+<p>Agent 领域很容易出现“为了先进而复杂”。多 Agent、复杂图编排、自动记忆、工具市场、通用治理平台，看起来都很诱人。</p>
+<p>危险在于：任务本来可以用一个确定性工作流解决，却被包装成自主 Agent；本来一个测试脚本能解决的问题，被包装成 LLM judge；本来一个审批节点能控制的风险，被交给 prompt 约束。</p>
+<p>这个剧本下，团队会花很多时间维护 Harness 本身，却没有提升真实任务成功率。更糟糕的是，过度接入 MCP、插件和外部工具会扩大攻击面，让安全和审计变得更难。</p>
+<p>判断一个 Harness 是否值得的标准很简单：它有没有减少失败、减少人工返工、提升可追踪性、降低风险。如果没有，它只是新一代胶水复杂度。</p>
+
+<h3>剧本 C：最乐观的走向，Harness Engineering 成为新型工程岗位</h3>
+<p>如果 Agent 真正进入软件开发、客服运营、财务分析、数据处理、供应链、餐饮运营、工业质检这些场景，组织会需要一类新角色：不是单纯写业务代码，也不是单纯调模型，而是设计 Agent 工作环境的人。</p>
+<p>这个角色可能叫：</p>
+<ul>
+<li>Agent Harness Engineer</li>
+<li>AI Platform Engineer</li>
+<li>AgentOps Engineer</li>
+<li>AI Workflow Architect</li>
+<li>Coding Agent Infrastructure Engineer</li>
+<li>AI 应用治理工程师</li>
+</ul>
+<p>它的核心能力是把人的经验、组织规则和业务边界转成 Agent 可执行、可验证、可审计的系统。</p>
+<p>这对前端/全栈工程师是一个机会。因为前端工程师天然熟悉用户流程、工具链、工程规范、浏览器自动化、状态管理和产品体验。如果再补上 LLM 工具调用、MCP、安全边界和评测方法，就很容易切到 Agent Harness 方向。</p>
+
+<h2>七、对你的项目和能力路线的建议</h2>
+<h3>1. 把 <code>develop-assistant</code> 当成个人 Harness 项目来经营</h3>
+<p>你这个仓库的定位已经很接近 Agent Harness：</p>
+<ul>
+<li><code>AGENTS.md</code> 是全局入口和协作规则。</li>
+<li><code>.agents/skills</code> 是渐进披露的能力包。</li>
+<li>各类专项 skill 是可复用的项目经验。</li>
+<li>MCP 配置是工具接入层。</li>
+<li>权限和沙箱规则是安全边界。</li>
+</ul>
+<p>下一步不建议盲目扩很多技能，而是建立“失败到 Harness 资产”的闭环：</p>
+<ol>
+<li>记录 Agent 在项目里犯过的具体错误。</li>
+<li>判断它应该沉淀成规则、脚本、模板、测试，还是 skill。</li>
+<li>加入后用下一次任务验证是否减少同类错误。</li>
+<li>定期清理过时规则，避免上下文污染。</li>
+</ol>
+<p>这样，这个仓库会从“技能集合”变成真正的个人 Agent 工作台。</p>
+
+<h3>2. 给每类技能补 Sensors</h3>
+<p>很多 skill 天然偏 Guides：告诉 Agent 应该怎么做。但如果缺少 Sensors，Agent 做完仍然靠人工肉眼判断。</p>
+<p>可以优先为高频场景补验证信号：</p>
+<ul>
+<li>Vue / uni-app：构建命令、lint、类型检查、关键页面截图。</li>
+<li>UI 技能：Playwright 截图、移动端视口检查、文本溢出检查。</li>
+<li>API 技能：mock、契约测试、错误码样例。</li>
+<li>文档类技能：链接检查、目录一致性检查、过时信息扫描。</li>
+<li>研究类技能：来源清单、日期标注、事实不确定性标记。</li>
+</ul>
+<p>一个好 skill 不只是“怎么做”，还要告诉 Agent“怎么知道做对了”。</p>
+
+<h3>3. 结合你的餐饮/机器烹饪背景做一个业务 Harness Demo</h3>
+<p>你有智能餐饮和机器烹饪背景，可以做一个小而完整的 Agent Harness 样例，比泛泛学 LangGraph 更有价值。</p>
+<p>建议场景：餐饮运营助手 Agent。</p>
+<p>边界可以这样设：</p>
+<ul>
+<li>只读工具：门店营业额、订单、菜品销量、设备状态、库存。</li>
+<li>低风险写工具：生成日报、生成补货建议、生成排班草稿。</li>
+<li>高风险动作：改菜单、改价格、发优惠券、触发设备动作，必须人工审批。</li>
+<li>验证：每个结论必须引用数据来源；金额、订单数、日期必须可复核。</li>
+<li>观测：记录每次工具调用、输入数据、生成建议、人工是否采纳。</li>
+</ul>
+<p>这个 Demo 能体现完整 Harness 思维：工具、权限、业务规则、验证、审批、审计全都有。</p>
+
+<h3>4. 学习优先级</h3>
+<p>如果目标是往 AI 应用开发和训练师方向延伸，我建议优先级这样排：</p>
+<ol>
+<li>Agent 基础：工具调用、结构化输出、function calling、MCP。</li>
+<li>Harness 基础：状态、memory、sandbox、权限、trace、retry、approval。</li>
+<li>评测能力：任务集、golden cases、LLM-as-judge、人工复核、回归测试。</li>
+<li>安全治理：prompt injection、tool poisoning、excessive agency、secret 隔离。</li>
+<li>业务落地：把餐饮/运营/设备流程拆成 Agent 可执行工作流。</li>
+</ol>
+<p>不要只学“某个框架怎么写”。框架会换，Harness 里的工程问题不会很快消失。</p>
+
+<h2>八、结论</h2>
+<p>AI Agent Harness 的价值，不在于它是一个新名词，而在于它准确命中了 Agent 落地后的主要矛盾：模型越来越能做事，但真实世界要求可控、可验证、可审计、可恢复。</p>
+<p>模型能力会继续提升，很多今天写在 Harness 里的小技巧会被模型吸收。比如更好的计划、更稳的工具调用、更强的自我检查。但只要 Agent 要接触真实文件、真实账号、真实业务系统、真实用户和真实风险，Harness 就不会消失。</p>
+<p>它会从“补模型短板的脚手架”，逐渐变成“组织让 AI 安全工作的操作系统”。</p>
+<p>对个人来说，Harness Engineering 是一个很值得下注的方向。它连接了前端工程化、自动化、测试、DevOps、业务流程、AI 评测和安全治理。对于有工程经验的人，它比单纯转算法更现实；对于想进入 AI 应用层的人，它比单纯学提示词更有护城河。</p>
+<p>我对这个方向的最终判断是：<strong>未来真正稀缺的不是会让 Agent 跑起来的人，而是能让 Agent 在组织里长期、稳定、低风险地产生价值的人。这个能力，就是 Harness。</strong></p>
+
+<h2>九、信息来源</h2>
+<ul>
+<li>Mitchell Hashimoto：《My AI Adoption Journey》，2026-02-05。<a href="https://mitchellh.com/writing/my-ai-adoption-journey">https://mitchellh.com/writing/my-ai-adoption-journey</a></li>
+<li>OpenAI / Ryan Lopopolo：《Harness engineering: leveraging Codex in an agent-first world》，2026-02-11。<a href="https://openai.com/index/harness-engineering/">https://openai.com/index/harness-engineering/</a></li>
+<li>LangChain / Vivek Trivedy：《The Anatomy of an Agent Harness》，2026-03-10。<a href="https://www.langchain.com/blog/the-anatomy-of-an-agent-harness">https://www.langchain.com/blog/the-anatomy-of-an-agent-harness</a></li>
+<li>Anthropic：《Building effective agents》，用于区分 workflows、agents、tool feedback 和 sandbox 测试原则。<a href="https://www.anthropic.com/engineering/building-effective-agents">https://www.anthropic.com/engineering/building-effective-agents</a></li>
+<li>OpenAI：《The next evolution of the Agents SDK》，2026-04-15。<a href="https://openai.com/index/the-next-evolution-of-the-agents-sdk/">https://openai.com/index/the-next-evolution-of-the-agents-sdk/</a></li>
+<li>Model Context Protocol 官方文档：《What is the Model Context Protocol (MCP)?》，访问时间 2026-06-04。<a href="https://modelcontextprotocol.io/docs/getting-started/intro">https://modelcontextprotocol.io/docs/getting-started/intro</a></li>
+<li>LangGraph 文档：《Persistence》，用于状态、checkpoint、human-in-the-loop、fault-tolerance 参考。<a href="https://docs.langchain.com/oss/python/langgraph/persistence">https://docs.langchain.com/oss/python/langgraph/persistence</a></li>
+<li>Birgitta Böckeler / Martin Fowler 网站：《Harness engineering for coding agent users》，2026-04-02。<a href="https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html">https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html</a></li>
+<li>OWASP：《Top 10 for Large Language Model Applications》，访问时间 2026-06-04。<a href="https://owasp.org/www-project-top-10-for-large-language-model-applications/">https://owasp.org/www-project-top-10-for-large-language-model-applications/</a></li>
+<li>OWASP GenAI Security Project：《Top 10 for Agentic Applications》，访问时间 2026-06-04。<a href="https://genai.owasp.org/download/52117/?tmstv=1765059207">https://genai.owasp.org/download/52117/?tmstv=1765059207</a></li>
+<li>Liu et al.：《Agentic Harness Engineering: Observability-Driven Automatic Evolution of Coding-Agent Harnesses》，arXiv:2604.25850，2026。<a href="https://arxiv.org/abs/2604.25850">https://arxiv.org/abs/2604.25850</a></li>
+<li>Ursekar et al.：《VeRO: A Harness for Agents to Optimize Agents》，arXiv:2602.22480，2026。<a href="https://arxiv.org/abs/2602.22480">https://arxiv.org/abs/2602.22480</a></li>
+<li>Xu et al.：《Adapting the Interface, Not the Model: Runtime Harness Adaptation for Deterministic LLM Agents》，arXiv:2605.22166，2026。<a href="https://arxiv.org/abs/2605.22166">https://arxiv.org/abs/2605.22166</a></li>
+<li>Polar：《Agentic RL on Any Harness at Scale》，arXiv:2605.24220，2026。<a href="https://arxiv.org/abs/2605.24220">https://arxiv.org/abs/2605.24220</a></li>
+</ul>
+
+<h2>十、方法说明</h2>
+<p>本报告采用横纵分析法：纵向追踪 AI Agent Harness 从传统测试环境、Agent benchmark、AutoGPT 式自主循环、上下文工程、Coding Agent 实践，到 2026 年 Harness Engineering 命名和产品化的演化；横向比较它与 Prompt Engineering、Context Engineering、Agent Framework、Sandbox、Eval Harness、MCP、Observability 之间的边界；最后交叉两条线，给出对个人能力路线和本项目 <code>develop-assistant</code> 的实践判断。</p>
+</body></html>
