@@ -1,0 +1,4 @@
+interface:
+  display_name: "话饼 uv-popup"
+  short_description: "实现 uv-popup 底部弹层和交互"
+  default_prompt: "Use $huabing-mini-vue2-uv-popup-flow 实现话饼小程序页面需要的 uv-popup 弹层效果和交互。"

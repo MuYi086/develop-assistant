@@ -36,6 +36,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 │   huabing-mini-vue2-ordering-business-flow/ # 点餐/购物车/支付/订单业务流
 │   huabing-mini-vue2-request-store-flow/  # 请求链路、API、Vuex 状态流
 │   huabing-mini-vue2-feature-scaffold/    # 新需求脚手架（页面/路由/API/Store 骨架）
+│   huabing-mini-vue2-hb-dialog-flow/     # hb-dialog 弹窗（中心确认/提示/规则/订单取消）
+│   huabing-mini-vue2-uv-popup-flow/      # uv-popup 弹层（底部弹层/购物车浮层/授权/选择）
 ├── 基础设施
 │   skill-creator/                  # 元技能：创建/优化其他技能
 │   jsdoc-best-practices/           # JSDoc 注释规范
@@ -87,6 +89,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | `huabing-mini-vue2-ordering-business-flow` | 点餐/购物车/支付/订单/烹饪业务修改 |
 | `huabing-mini-vue2-request-store-flow` | API 接口、请求封装、Vuex 状态管理修改 |
 | `huabing-mini-vue2-feature-scaffold` | 新需求脚手架生成（新建页面/路由/API/Store） |
+| `huabing-mini-vue2-hb-dialog-flow` | hb-dialog 弹窗（中心确认/提示/规则/订单取消弹窗） |
+| `huabing-mini-vue2-uv-popup-flow` | uv-popup 弹层（底部弹层/购物车浮层/授权/选择弹层） |
 
 ## Git 工作流
 

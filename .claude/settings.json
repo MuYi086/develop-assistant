@@ -146,6 +146,14 @@
     "huabing-mini-vue2-feature-scaffold": {
       "source": ".agents/skills/huabing-mini-vue2-feature-scaffold",
       "sourceType": "local"
+    },
+    "huabing-mini-vue2-hb-dialog-flow": {
+      "source": ".agents/skills/huabing-mini-vue2-hb-dialog-flow",
+      "sourceType": "local"
+    },
+    "huabing-mini-vue2-uv-popup-flow": {
+      "source": ".agents/skills/huabing-mini-vue2-uv-popup-flow",
+      "sourceType": "local"
     }
   },
   "sandbox": {

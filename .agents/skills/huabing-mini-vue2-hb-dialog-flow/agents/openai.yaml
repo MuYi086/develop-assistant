@@ -1,0 +1,4 @@
+interface:
+  display_name: "话饼 hb-dialog"
+  short_description: "实现 hb-dialog 确认弹窗和交互"
+  default_prompt: "Use $huabing-mini-vue2-hb-dialog-flow 实现话饼小程序页面需要的 hb-dialog 弹窗效果和交互。"
