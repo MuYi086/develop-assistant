@@ -154,6 +154,10 @@
     "huabing-mini-vue2-uv-popup-flow": {
       "source": ".agents/skills/huabing-mini-vue2-uv-popup-flow",
       "sourceType": "local"
+    },
+    "project-docs-maintainer": {
+      "source": ".agents/skills/project-docs-maintainer",
+      "sourceType": "local"
     }
   },
   "sandbox": {
