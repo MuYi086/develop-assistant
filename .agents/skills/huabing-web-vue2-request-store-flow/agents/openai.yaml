@@ -1,0 +1,4 @@
+interface:
+  display_name: "话饼 Web Vue2 请求状态流"
+  short_description: "串联任意 Vue 2 项目的 API、Axios 与 Vuex 数据流"
+  default_prompt: "使用 $huabing-web-vue2-request-store-flow 为一个 Vue 2 业务补齐 API、Vuex 与页面数据链路。"

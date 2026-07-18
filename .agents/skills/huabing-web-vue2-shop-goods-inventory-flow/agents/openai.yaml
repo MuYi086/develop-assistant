@@ -1,0 +1,4 @@
+interface:
+  display_name: "话饼 Web Vue2 商品库存流"
+  short_description: "实现可迁移的门店商品、销售范围与共享独立库存完整业务"
+  default_prompt: "使用 $huabing-web-vue2-shop-goods-inventory-flow 实现一个 Vue 2 门店商品与库存需求。"

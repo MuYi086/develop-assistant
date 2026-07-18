@@ -1,0 +1,4 @@
+interface:
+  display_name: "话饼 Web Vue2 门店订货流"
+  short_description: "实现门店订货补货、异步汇总、状态操作与完整导出链路"
+  default_prompt: "使用 $huabing-web-vue2-shop-indent-flow 实现一个 Vue 2 门店订货或补货需求。"

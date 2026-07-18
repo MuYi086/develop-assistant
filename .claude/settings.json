@@ -187,6 +187,38 @@
       "source": ".agents/skills/huabing-mini-vue3-runtime",
       "sourceType": "local"
     },
+    "huabing-web-vue2-check-in-activity-flow": {
+      "source": ".agents/skills/huabing-web-vue2-check-in-activity-flow",
+      "sourceType": "local"
+    },
+    "huabing-web-vue2-cupboard-monitor-flow": {
+      "source": ".agents/skills/huabing-web-vue2-cupboard-monitor-flow",
+      "sourceType": "local"
+    },
+    "huabing-web-vue2-order-compatibility-flow": {
+      "source": ".agents/skills/huabing-web-vue2-order-compatibility-flow",
+      "sourceType": "local"
+    },
+    "huabing-web-vue2-page-component-conventions": {
+      "source": ".agents/skills/huabing-web-vue2-page-component-conventions",
+      "sourceType": "local"
+    },
+    "huabing-web-vue2-release-automation": {
+      "source": ".agents/skills/huabing-web-vue2-release-automation",
+      "sourceType": "local"
+    },
+    "huabing-web-vue2-request-store-flow": {
+      "source": ".agents/skills/huabing-web-vue2-request-store-flow",
+      "sourceType": "local"
+    },
+    "huabing-web-vue2-shop-goods-inventory-flow": {
+      "source": ".agents/skills/huabing-web-vue2-shop-goods-inventory-flow",
+      "sourceType": "local"
+    },
+    "huabing-web-vue2-shop-indent-flow": {
+      "source": ".agents/skills/huabing-web-vue2-shop-indent-flow",
+      "sourceType": "local"
+    },
     "project-docs-maintainer": {
       "source": ".agents/skills/project-docs-maintainer",
       "sourceType": "local"

@@ -1,0 +1,4 @@
+interface:
+  display_name: "话饼 Web Vue2 打卡活动流"
+  short_description: "实现可迁移的活动、任务、条件、奖励与弹窗完整状态流"
+  default_prompt: "使用 $huabing-web-vue2-check-in-activity-flow 实现一个 Vue 2 打卡或任务活动需求。"

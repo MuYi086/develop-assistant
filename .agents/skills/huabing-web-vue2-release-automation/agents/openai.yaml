@@ -1,0 +1,4 @@
+interface:
+  display_name: "话饼 Web Vue2 发布自动化"
+  short_description: "安全维护 Vue 2 多环境构建、版本、部署与通知链路"
+  default_prompt: "使用 $huabing-web-vue2-release-automation 调整一个 Vue 2 项目的构建与发布自动化流程。"

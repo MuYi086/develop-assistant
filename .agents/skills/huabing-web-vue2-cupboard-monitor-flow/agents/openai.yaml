@@ -1,0 +1,4 @@
+interface:
+  display_name: "话饼 Web Vue2 柜机监控流"
+  short_description: "实现多代智能设备、传感器、库存、日志与安全轮询监控"
+  default_prompt: "使用 $huabing-web-vue2-cupboard-monitor-flow 实现一个 Vue 2 智能柜机或设备监控需求。"

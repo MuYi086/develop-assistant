@@ -1,0 +1,4 @@
+interface:
+  display_name: "话饼 Web Vue2 订单兼容流"
+  short_description: "完整兼容订单版本、渠道、套餐 SKU、履约与多种售后"
+  default_prompt: "使用 $huabing-web-vue2-order-compatibility-flow 修改一个 Vue 2 订单详情并保持多场景兼容。"
