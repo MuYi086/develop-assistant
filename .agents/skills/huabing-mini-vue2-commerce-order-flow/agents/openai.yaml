@@ -1,0 +1,4 @@
+interface:
+  display_name: "UniApp Vue2 交易订单流"
+  short_description: "维护购物车、结算试算、订单状态、履约过程和跨页面标识一致性"
+  default_prompt: "使用 $huabing-mini-vue2-commerce-order-flow 实现这个 UniApp Vue 2 购物车或订单流程。"

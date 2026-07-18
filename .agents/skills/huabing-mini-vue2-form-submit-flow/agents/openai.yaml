@@ -1,0 +1,4 @@
+interface:
+  display_name: "UniApp Vue2 表单提交"
+  short_description: "分离输入归一、校验提示、按钮状态、异步防重和提交失败恢复"
+  default_prompt: "使用 $huabing-mini-vue2-form-submit-flow 实现这个 UniApp Vue 2 表单并防止重复提交。"

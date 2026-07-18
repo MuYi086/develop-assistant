@@ -1,87 +1,56 @@
 ---
 name: huabing-mini-vue2-core-workflow
-description: 话饼 UniApp 项目核心工作流。用于在本仓库处理项目治理、路由和分包、manifest/env 生成配置、模块边界、跨端工程约束、中文优先文档、构建脚本和需要先定架构边界的维护任务。业务实现按 UI、请求状态、登录、首页门店、点餐、支付、售后或营销会员专项 skill 协作。
+description: 通用 UniApp + Vue 2 移动端项目工作流。用于接手或维护陌生项目时识别仓库约束、页面与分包、pages/manifest/env 生成关系、模块边界、条件编译、构建命令和验证矩阵；也用于跨 UI、请求、状态、登录、支付或业务域的改动先确定影响范围。
 ---
 
-# 话饼 UniApp 核心工作流
+# UniApp Vue 2 核心工作流
 
-## 快速入口
+## 先发现，再实现
 
-改项目结构、路由、生成配置或跨模块流程前，按任务选择读取：
+1. 读取目标仓库中的 `AGENTS.md`、`CLAUDE.md`、constitution、README 和目录内局部说明；目标仓库规则优先于本技能示例。
+2. 读取 `package.json`、锁文件、Vue/UniApp/Vuex 版本、构建脚本和 lint/test 命令，不擅自迁移框架或包管理器。
+3. 定位 `pages.json`、`manifest.json`、环境配置及其生成脚本。先判断文件是源文件还是生成物，再决定修改落点。
+4. 从目标页面沿数据流反向追踪组件、API、请求封装、Store、持久化和路由，不假设目录名与某个项目一致。
+5. 检查同领域相邻实现和历史兼容版本，只提炼当前仍成立的契约。
 
-- `.claude/constitution.md`，宪章优先级高于普通经验。
-- `AGENTS.md`、`CLAUDE.md`
-- `package.json`
-- `src/pages.json`
-- `src/manifest.json`
-- `zxScript/main.mjs`
-- 目标页面、相邻组件、对应 `src/store/modules/` 模块和 `src/utils/api/` API 文件
+## 技术基线
 
-当任务涉及页面入口、生成文件来源、示例业务页、Vuex/API 主干或本地包边界时，再读 `references/source-map.md`。
+- 使用目标项目既有的 Vue 2 Options API，不引入 `<script setup>`、Composition API 或 Vue 3 专属语法。
+- `data` 返回每个实例独立的对象；`methods`、watcher 和生命周期钩子使用普通函数，避免箭头函数破坏 `this`。
+- 源状态保持最小，派生展示值优先放 `computed`；watcher 只处理副作用。
+- 组件默认遵守 props down / events up；只有打开弹层、聚焦、测量等命令式行为才暴露最小 `ref` API。
+- 页面负责生命周期和流程编排，Store 负责跨组件状态，request/client 层负责传输，纯转换放普通 util。
 
-## 协同规则
+## UniApp 边界
 
-- UI、组件、样式、滚动、弹窗、自定义导航：使用 `huabing-mini-vue2-cross-platform-ui` 的细节规则。
-- 接口、请求头、错误处理、Vuex、getter、持久化：使用 `huabing-mini-vue2-request-store-flow` 的细节规则。
-- 点餐、购物车、确认订单、支付、订单详情、烹饪：使用 `huabing-mini-vue2-ordering-business-flow` 的细节规则。
-- 登录、注册、隐私、token 和用户状态：使用 `huabing-mini-vue2-auth-user-flow`。
-- 首页初始化、定位、推荐门店和门店搜索：使用 `huabing-mini-vue2-home-shop-location-flow`。
-- 原生支付、钱包、餐卡和支付结果：使用 `huabing-mini-vue2-payment-channel-flow`。
-- 订单取消、退款和商责售后：使用 `huabing-mini-vue2-order-after-sales-flow`。
-- 优惠券、拼饭、抽奖、商城和会员：使用 `huabing-mini-vue2-marketing-member-flow`。
-- 多域任务先用本 skill 定边界，再加载对应专项 skill；不要用本 skill 替代专项业务规则。
+- 平台差异使用 `#ifdef` / `#ifndef` 条件编译；先复用项目已有平台常量和适配器。
+- 页面路由、主包/分包、tabBar 和自定义导航以目标项目的 `pages.json` 或生成源为准。
+- 使用 `uni.*` 前先核对目标平台支持度、权限声明、返回结构和 H5 降级路径。
+- 尺寸单位、安全区、键盘、selector query、scroll-view 和 swiper 行为按目标平台实测，不复制固定机型数值。
+- 环境地址、密钥、支付渠道、静态资源前缀和 socket 地址必须来自配置层。
 
-## 技术边界
+## 多技能串联
 
-- 使用 UniApp + Vue 2.6 + Vuex 3 + `@climblee/uv-ui` 的现有模式。
-- 不引入 Vue 3、`<script setup>`、Composition API、Vite 或新前端框架。
-- 不把包管理器擅自切到 `pnpm`、`yarn` 或其他工具；按仓库现状使用 `npm run ...`。
-- 页面和组件使用 Vue 2 Options API：`props`、`data`、`computed`、`watch`、`methods`、生命周期。
-- 面向项目所有者的文档、skill、计划、检查清单和说明中文优先；命令、路径、API 字段、JSON key、代码标识符和英文专有名词可以保留英文。
+- 请求、鉴权 header、错误和 Vuex：使用 `huabing-mini-vue2-request-store-flow`。
+- 页面与局部模块骨架：使用 `huabing-mini-vue2-feature-scaffold`。
+- 组件、滚动、导航和跨端样式：使用 `huabing-mini-vue2-cross-platform-ui`。
+- 中心弹窗或底部弹层：分别使用 `huabing-mini-vue2-dialog-flow`、`huabing-mini-vue2-popup-flow`。
+- 定时器、轮询、WebSocket：使用 `huabing-mini-vue2-realtime-lifecycle-flow`。
+- 表单或列表：使用 `huabing-mini-vue2-form-submit-flow`、`huabing-mini-vue2-list-pagination-flow`。
+- 旧版/新版页面并行和路由矩阵：使用 `huabing-mini-vue2-versioned-route-flow`。
+- 业务域再按登录、定位、交易、支付、售后或营销会员技能补充，不用业务技能替代基础层规则。
 
-## 目标作者风格基线
+## 实施顺序
 
-- 先读同领域相邻页面、组件、Store 和 API，再沿用其命名与生命周期；不要跨域套统一模板。
-- 页面使用 Vue 2 Options API，常见顺序为 `options/components/computed/watch/data`、页面生命周期、`methods`。
-- 页面请求显式构造 `url`、`params`、`method`，再 dispatch Vuex action；登录/未登录 endpoint 在调用点清晰分支。
-- Store 使用带领域前缀的 state/getter、`SET_*` mutation、`do*` action、`reset/recover`，并在 action 中归一化后端数据。
-- 跨页面重复的参数、路由和状态矩阵下沉 `util.js`；页面私有交互留在页面，子组件通过 props/ref/emit 协作。
-- 页面根 class 使用 `container`，可复用组件根 class 使用 `component`；样式沿用 scoped SCSS、rpx 和现有 mixin/token。
-- 公共函数或复杂业务函数写中文 JSDoc/注释；简单方法不为凑形式堆注释。
-- 只学习当前仍成立的模式。不要复制历史提交里的调试 class、无效空生命周期、敏感日志、大片 Deprecated 注释或明显重复代码。
-
-## 实现顺序
-
-1. 通过 `src/pages.json` 和 `zxScript/basicPages*.mjs` 定位页面入口。
-2. `src/pages.json` 是压缩 JSON，查路由时优先用 `rg` 定位 path，再回到生成源确认。
-3. 追踪数据流：`api_*.js` 常量 -> `api/index.js` 汇总 -> Vuex action -> 页面方法 -> 组件 props/events。
-4. 保持页面负责生命周期和 UI 编排：`onLoad` 处理入参和首屏请求，`onShow` 处理返回刷新，`onUnload` 清理 timer、页面态和旧 store 状态。
-5. 多页面共用的业务转换放入 `src/utils/util.js`；只服务单页的逻辑留在页面或局部组件。
-6. 不擅自合并 v1/v2 流程。`shop`/`shopV1`、`orderConfirm`/`orderConfirmV1`、新旧订单详情并存是既有架构。
-
-## 跨端规则
-
-- 平台差异使用 `#ifdef MP`、`#ifdef H5`、`#ifdef MP-WEIXIN`、`#ifdef MP-ALIPAY`。
-- 微信和支付宝差异不要用运行时猜测替代条件编译，尤其是登录、支付、授权、分享、订阅消息、`clientId`。
-- 不在业务代码里绕过 `config.js` 硬编码环境地址、socket 地址、支付渠道或 OSS 前缀。
-- 新增分包超过 `pagesA-L` 范围时，必须考虑各平台分包大小限制并同步路由配置。
-
-## 生成文件
-
-- 禁止直接维护 `src/env.js` 作为源文件；它由 `zxScript/main.mjs` 生成。
-- 路由和 manifest 的源头在 `zxScript/basicPages*.mjs`、`zxScript/basicManifest*.mjs`、`zxScript/basicManifest.env.mjs`。
-- 需要切换平台或环境时使用生成脚本，例如 `zx ./zxScript/main.mjs -p mp-weixin -e inner` 或对应 `npm run zx:manifest:*`。
-- 如果为了验证临时看了生成结果，结束前确认生成源文件也需要同步。
-
-## 状态规则
-
-- Vuex 模块保持 `initState -> state -> mutations -> actions -> export default`。
-- 只把必须跨重启保留的数据加入 `config.vuexStorePath`。
-- 持久化新增内容要说明原因，避免超过小程序 storage 限制。
-- 局部重置优先使用已有 reset mutation 或 `storeModuleReset` 思路，不要在页面里散落大段手动清理。
+1. 写出入口、状态所有者、外部副作用和清理点。
+2. 列出受影响平台、登录态、页面版本和成功/失败/取消路径。
+3. 先修改最底层稳定契约，再修改 Store、页面和组件调用方。
+4. 保留旧流程时建立显式适配或路由矩阵，不散落版本判断。
+5. 修改生成源后运行生成命令，并审查生成差异；不要把生成结果当长期维护源。
 
 ## 验证
 
-- 路由、环境、manifest 修改后运行对应 `npm run zx:manifest:*` 并检查 `src/env.js`、`src/pages.json`、`src/manifest.json`。
-- `.vue` 或样式变更后优先运行 `npm run lint:stylelint`。
-- 触及登录、支付、订单、购物车、优惠券、钱包、WebSocket 或请求层时，同时评估登录/未登录、H5/小程序、微信/支付宝差异。
+- 运行目标项目实际存在的 lint、测试和最小构建命令。
+- 至少覆盖目标平台、登录/未登录、首次进入/返回刷新、成功/失败/取消和页面卸载清理。
+- 涉及持久化时检查容量、敏感数据和旧版本迁移；涉及异步时检查重复请求、过期响应和 loading 恢复。
+- 面向项目所有者的计划、说明、检查清单和 metadata 中文优先。

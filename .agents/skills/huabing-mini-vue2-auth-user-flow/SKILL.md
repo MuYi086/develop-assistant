@@ -1,64 +1,56 @@
 ---
 name: huabing-mini-vue2-auth-user-flow
-description: 话饼 UniApp Vue 2 登录与用户状态技能。用于修改 hb-login、微信/支付宝登录注册、手机号授权、隐私协议、邀请码注册关系、token/refreshToken 存储与续签、登录弹层回调、未登录拦截、用户信息刷新和注销重置流程。
+description: 通用 UniApp + Vue 2 登录与用户会话技能。用于微信/支付宝/其他平台登录、注册、手机号或隐私授权、协议确认、邀请参数、token/refreshToken、单次刷新、登录弹层回调、未登录拦截、用户信息恢复和注销清理；不依赖特定 endpoint 或组件名。
 ---
 
-# 话饼登录与用户状态流
+# UniApp Vue 2 登录与用户会话
 
-## 快速入口
+## 先画状态机
 
-处理登录、注册、隐私授权或 token 前，先读取：
+至少区分：
 
-- `src/components/hb-login/hb-login.vue`
-- `src/store/modules/user.js`
-- `src/utils/api/api_login.js`、`src/utils/api/api_user.js`
-- `src/utils/authHttp.js`、`src/utils/storage.js`
-- 触发登录的目标页面，以及 `src/pages/home/home.vue` 的隐私初始化
+- `anonymous`：未登录。
+- `authorizing`：正在获取平台 code/授权信息。
+- `registerRequired`：需要协议、手机号或资料。
+- `authenticated`：token 有效。
+- `refreshing`：刷新 token，其他请求等待同一 Promise。
+- `expired`：刷新失败，需要重新登录。
 
-需要核对平台分支、邀请注册、token 续签或目标提交依据时，再读 `references/source-map.md`。
+UI 文案可以不同，但状态转换、可取消点和失败回退必须明确。
 
-## 登录状态机
+## 平台授权边界
 
-1. 父页面通过 `ref.init()` 或既有 `util.checkToken(this)` 拉起登录，不直接复制登录逻辑。
-2. `hb-login` 打开前获取平台 code，再调用注册检查接口判断已注册/未注册。
-3. 已注册用户调用 `authCustomTokenSocial`，成功后同时提交 `SET_TOKEN` 和 `SET_REFRESHTOKEN`。
-4. 未注册用户先校验协议和手机号授权，再按平台调用微信或支付宝注册接口；注册成功后进入登录流程。
-5. 关闭弹层时保持 `popupClose`、`popChange`、`resetCommit` 和父页面回调一致，避免旧 code、按钮禁用态或邀请参数残留。
+- 平台 code、手机号授权、隐私 API 和回调结构使用条件编译或 provider adapter。
+- 不假设事件一定含 `detail`，先按目标 UniApp/平台版本校验返回结构。
+- 页面不直接调用注册 endpoint；统一由 auth service/store 编排 provider 参数。
+- 登录 popup 只收集授权和发出结果，不耦合购物车、订单或活动页面。
+- 登录成功后由原触发页根据 reason/continuation 刷新业务，不在登录组件写页面分支。
 
-## 平台分支
+## Token 契约
 
-- 微信、支付宝授权按钮和回调使用现有条件编译与 `runEnv` 分支。
-- 微信手机号授权回调不能假设一定存在 `e.detail`；兼容 uni-app 拉起授权的返回形态。
-- 微信注册使用 `adminCustomRegister`，支付宝使用 `adminCustomAlipayRegister`，不要混用 code 或手机号字段。
-- 支付宝请求头的 `clientId` 由 `authHttp` 注入，不在页面重复添加。
-- 隐私授权优先沿用首页 `uni.getPrivacySetting` 与 `hb-dialog-privacy`；支付宝按现有路径继续定位初始化。
+- token 注入只在请求 client/interceptor 完成，业务页面不拼 Authorization。
+- access token、refresh token、过期时间和用户摘要由单一会话状态源管理，再同步到项目既有 storage。
+- 刷新使用 single-flight，刷新请求本身禁止再次触发刷新；失败后清理会话并拒绝等待队列。
+- 冷启动恢复先校验 schema、过期时间和用户隔离，再标记 authenticated。
+- 注销同时停止 socket/timer、清理用户级 Store 和敏感缓存，不只删除 token 字符串。
 
-## Token 与用户状态
+## 注册、协议与邀请
 
-- token 和 refreshToken 通过 `user` store mutation 同步到 `config` 与 `storage`，不要只改其中一处。
-- 普通请求由 `authHttp.getAccessToken()` 注入 bearer token；续签使用 refreshToken 链路，不在业务页手写 Authorization。
-- 保留 `authOauthCheckToken`、`authOauthToken` 以及 `util.checkTokenExpire` 一类公共能力的职责边界。
-- 用户信息写入 `userInfo`，跨页面消费通过 getter；退出或登录失败后使用现有 reset action 清理。
-- 修改持久化时同时检查 `config.vuexStorePath` 和 `src/store/index.js`，禁止持久化授权临时 code、手机号解密数据或注册请求体。
+- 协议勾选、手机号授权和资料校验在正式提交时再次验证，不能只依赖按钮 disabled。
+- 邀请/渠道参数先归一化并设置允许字段白名单，登录完成后按后端契约消费一次。
+- 授权拒绝、隐私不同意和用户主动关闭属于可预期结果，不显示为系统异常。
+- 错误日志脱敏，不记录 token、完整手机号、授权密文、身份证或密码。
 
-## 邀请与页面恢复
+## 未登录业务入口
 
-- 邀请注册参数从 `inviteFriendsInviteObj` 读取，`invitedId`、`inviteCompanyId` 等缺省值显式归一为空字符串。
-- 注册错误上报只发送排障所需字段；不得写入或输出 token、完整手机号、敏感授权数据。
-- 登录成功后由原触发页刷新业务状态，不让 `hb-login` 直接耦合购物车、订单或活动页面。
-- 订单列表、点餐、优惠券等未登录入口继续通过公共登录组件，不新增平行登录弹窗。
-
-## 实现风格
-
-- 页面/组件负责平台交互和流程编排；API 常量、Store 状态、HTTP header 各自留在现有层。
-- 保持 Vue 2 Options API、`popupShow`/`popupClose`、Promise 返回和父子事件模式。
-- 修复历史问题时保留当前父页面事件名，不顺手重命名全局登录事件。
-- 优先做小范围兼容修复；不要为了统一风格重写成熟授权链路。
+- 通过统一 `ensureAuthenticated({ reason, continuation })` 或等价能力拉起登录。
+- 登录取消后恢复原按钮、popup 和 loading；不要留下半提交状态。
+- 同一页面多次点击只允许一个登录流程，后续调用复用结果或明确拒绝。
+- 登录前产生的匿名业务数据是否迁移，交给对应业务域以幂等方式处理。
 
 ## 验证
 
-- 微信：已注册登录、未注册手机号授权、拒绝授权、隐私协议未勾选。
-- 支付宝：授权登录、注册、`clientId` 请求头和返回事件。
-- 邀请：有/无 `invitedId`、`inviteCompanyId` 两类注册。
-- Token：登录写入、冷启动恢复、过期续签、退出清理。
-- 业务入口：登录成功后原页面刷新，取消登录后按钮和弹层状态恢复。
+- 各目标平台：已注册、未注册、拒绝授权、隐私未同意、平台 API 失败。
+- Token：正常请求、并发过期、刷新成功、刷新失败、冷启动恢复、注销清理。
+- 页面：登录成功后继续原动作，取消后状态恢复，返回/卸载不触发过期回调。
+- 安全：storage、日志、埋点和错误上报中没有敏感明文。

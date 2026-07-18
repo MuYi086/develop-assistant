@@ -1,0 +1,4 @@
+interface:
+  display_name: "UniApp Vue2 版本化路由"
+  short_description: "统一旧新版入口、路由矩阵、query 归一和导航语义"
+  default_prompt: "使用 $huabing-mini-vue2-versioned-route-flow 设计这个 UniApp Vue 2 旧新版兼容路由。"

@@ -1,0 +1,4 @@
+interface:
+  display_name: "UniApp Vue2 实时生命周期"
+  short_description: "管理 WebSocket、心跳重连、轮询和页面资源清理"
+  default_prompt: "使用 $huabing-mini-vue2-realtime-lifecycle-flow 实现并验证这个实时连接或轮询流程。"

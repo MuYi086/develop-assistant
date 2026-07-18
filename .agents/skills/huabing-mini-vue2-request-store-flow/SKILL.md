@@ -1,91 +1,59 @@
 ---
 name: huabing-mini-vue2-request-store-flow
-description: 话饼请求、API、Vuex 状态流技能。用于新增或修改接口常量、api/index.js 聚合、basicHttp/authHttp/util.postData 请求链路、登录和未登录接口对、请求头、错误处理、本地拦截上报、Vuex module/action/getter、storeModuleReset、持久化白名单和 storage 行为。
+description: 通用 UniApp + Vue 2 请求与状态流。用于新增或修改 API、请求客户端、鉴权 header、token 刷新、错误归一、请求取消、登录/未登录接口、Vuex 3 module/action/getter、状态重置、持久化和 storage；适配目标项目已有目录与请求库，不要求固定封装名称。
 ---
 
-# 话饼请求与状态流
+# UniApp Vue 2 请求与状态流
 
-## 快速入口
+## 建立当前链路地图
 
-改接口、请求封装、错误处理、Vuex 模块、getter、持久化或 storage 前，先读这些文件：
+先定位并记录目标项目实际采用的五层职责，允许合并层级但不允许职责失踪：
 
-- `src/utils/common/basicHttp.js`
-- `src/utils/authHttp.js`
-- `src/utils/util.js`
-- `src/utils/api/index.js`
-- 目标 `src/utils/api/api_*.js`
-- `src/store/index.js`
-- `src/store/getters.js`
-- 目标 `src/store/modules/*.js`
+1. endpoint：路径、method 和协议字段。
+2. transport/client：`uni.request` 或第三方请求库、超时、取消、序列化。
+3. auth/interceptor：token、平台 header、刷新、错误归一和日志。
+4. domain/store：业务参数、响应归一、Vuex action/mutation。
+5. page/component：触发、loading、空态和预期业务失败展示。
 
-当任务涉及本地 mock、错误上报、持久化白名单或请求链路边界时，再读 `references/source-map.md`。需要新增 Vuex 模块或补 action/mutation 模式时，再读 `references/store-module-pattern.md`。
+不要把某个项目的文件名、成功码或 callback 形态当作通用契约。先读现有实现，再沿用它的导入方式和返回结构。
 
-## 四层请求链路
+## 请求契约
 
-按既有链路处理，不在业务页重复封装基础请求：
+- endpoint 层不硬编码域名、token 或环境；base URL 来自配置。
+- client 统一返回 Promise，并保留取消、超时和原始错误信息。
+- 在单一边界把传输错误、HTTP 错误、业务错误归一为稳定结构，例如 `{ kind, code, message, retryable, raw }`。
+- 预期由页面处理的业务失败要允许关闭全局 toast；取消请求不显示错误。
+- token 刷新使用 single-flight：同一时刻只发一次刷新，等待请求复用结果；刷新失败统一清会话并阻止无限重试。
+- 登录/未登录 endpoint 只有在后端确实区分时才成对维护；调用点显式选择，不通过字符串替换猜路径。
+- 日志只记录排障所需字段，脱敏 Authorization、手机号、身份证、支付凭据和完整请求体。
 
-1. `src/utils/common/basicHttp.js`
-   - Promise 化 `uni.request`。
-   - 维护请求任务，用于 `abortAllRequest`。
-   - 管理导航栏 loading 和下拉刷新结束。
-   - 请求前和失败时调用 `interceptRequest.start()`。
+## Vuex 3 约定
 
-2. `src/utils/authHttp.js`
-   - 构造请求头。
-   - 注入 bearer token、mini version、支付宝 `clientId`。
-   - 按请求类型选择 JSON 或 form content type。
+- 先判断数据是否确实跨组件/跨页面共享；瞬时请求结果可留在页面，不为形式进入 Store。
+- 模块使用工厂式 `createInitialState()`，避免嵌套对象在 reset 后共享引用。
+- mutation 只做同步状态修改；action 负责请求、归一化和提交，并把 Promise 返回给调用方。
+- state 保持领域原始状态，展示 label、合计和过滤结果优先由 getter/computed 派生。
+- 页面不要直接修改 Store 内部对象；需要草稿态时显式区分 `draft` 与 `committed`。
+- reset 覆盖页面退出、用户切换和业务重新开始三类场景；不要在页面散落大段赋空。
+- 需要通用示例时读取 `references/vuex-module-pattern.md`。
 
-3. `src/utils/util.js`
-   - `postData` 负责 callback 请求、`code === 0` 判断和错误分发。
-   - `postDataPromise` 供 Vuex action 使用。
-   - `errorFunction` 统一处理 toast、登录异常和业务失败。
+## 持久化与 storage
 
-4. `src/store/modules/*.js`
-   - 页面发起的数据请求通常通过 Vuex action。
+- 只持久化冷启动后仍必须恢复的最小字段，并记录 schema/version。
+- token 和 refresh token 使用项目已有安全存储策略；不持久化授权临时 code、解密数据或表单敏感草稿。
+- 大列表、图片/base64 和高频临时态不进入持久化；移动端 storage 容量必须纳入设计。
+- 读取旧缓存时校验类型、版本和过期时间；迁移失败回退初始状态。
 
-## 新增接口
+## 页面协作
 
-1. 在对应 `src/utils/api/api_*.js` 只添加接口路径常量。
-2. 在 `src/utils/api/index.js` 手动 import 该 API 文件。
-3. 将新模块展开合并进导出的 `api` 对象。
-4. 登录和未登录接口如果后端成对提供，要同时评估并保持显式命名。
-5. 记住小程序端在 `api/index.js` 模块加载时拼接 `config.apiUrl`，H5 行为不同，不要混用。
-
-## Vuex 模块模式
-
-保持本项目常见结构：`initState -> state -> mutations -> actions -> export default`。页面只需要结果、不需要写 store 时，可以直接 `return util.postDataPromise(requestParams)`。需要样例时读 `references/store-module-pattern.md`。
-
-## Action 约定
-
-- action 名沿用 `do...` 风格。
-- action 内做后端数据归一化，再 commit。
-- mutation 使用 `SET_*` 命名，页面不要直接改模块内部结构。
-- 静默刷新、轮询、价格预取等场景传 `isShowLoading=false`。
-- 页面需要自定义错误弹窗或恢复逻辑时传 `isToastError=false`。
-- 需要多个请求首屏并发时，让 action 返回 Promise，页面用 `Promise.all` 编排。
-- action 只是透传请求、不写状态时直接返回 `util.postDataPromise`；需要转换和 commit 时保持周边模块的 Promise 返回形态，不额外吞掉错误。
-
-## 鉴权、错误和持久化
-
-- 不在新代码里硬编码 token、私钥、Basic auth 字符串或 app secret。
-- 普通授权请求走 `authHttp`。
-- 需要客户端鉴权头时复用 `util.renderClientAuthHeader()` 或周边既有模式。
-- token、refreshToken 通过 store getter 或 `storage` 包装读取，不散落原始 key。
-- 不破坏 `checkTokenExpire`、`miniProgramOauthCheckToken`、`miniProgramRefreshToken` 的续签链路。
-- 通用 HTTP 和业务错误留在 `util.errorFunction`。
-- 预期业务失败由页面处理时关闭默认 toast，并在 fail 分支恢复按钮状态或弹窗状态。
-- abort 的请求不显示错误。
-- `interceptRequest.js` 负责 inner 本地 mock、inner/preProd/prod 错误上报；调整请求结构时确认日志链路仍可用。
-- 页面大量使用 `mapGetters`，新增跨组件状态时同步 `src/store/getters.js`。
-- getter 命名保持领域前缀，例如 `shopCartPriceInfo`、`orderConfirmPriceInfo`、`walletOrderConfirmChoosedPayMethod`。
-- 只有确实需要跨启动保留的数据才加入 `config.vuexStorePath`。
-- 只持久化少数字段时优先使用 `src/store/index.js` 里的 reducer 思路，不直接持久化大对象。
-- storage 操作优先通过 `src/utils/storage.js`。
-- `config.vuexStorePath` 当前还包含 `wallet`、`commonOrderDetail` 等新增持久化模块；每次以源码数组为准，不沿用旧文档白名单。
+- 首屏并发让 action 返回 Promise，由页面使用 `Promise.all` 或 `Promise.allSettled` 按原子性要求编排。
+- 搜索、切 tab 和返回刷新要防止旧响应覆盖新状态，可使用 request id、查询 key 或取消能力。
+- loading、按钮锁和弹层状态必须在成功、失败、取消的 `finally` 路径恢复。
+- 分页使用 `huabing-mini-vue2-list-pagination-flow`；登录会话使用 `huabing-mini-vue2-auth-user-flow`。
 
 ## 验证
 
-- 接口变更检查登录和未登录分支。
-- 请求头变更检查微信、支付宝和 H5。
-- 持久化变更检查 storage 大小和页面返回后的旧状态。
-- 请求层变更检查本地拦截和错误上报。
+- 检查登录/未登录、token 正常/过期/刷新失败、网络错误/业务错误/取消。
+- 检查微信、支付宝、H5/App 所需 header 与 base URL 行为。
+- 检查并发刷新只有一次、错误不会被吞、页面卸载后不会写入错误页面态。
+- 检查持久化体积、敏感字段、旧缓存迁移和用户退出清理。

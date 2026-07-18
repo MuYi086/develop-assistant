@@ -1,0 +1,4 @@
+interface:
+  display_name: "UniApp Vue2 底部弹层"
+  short_description: "实现 popup 草稿提交、遮罩层级、安全区和父子契约"
+  default_prompt: "使用 $huabing-mini-vue2-popup-flow 按目标项目组件库实现这个底部弹层。"

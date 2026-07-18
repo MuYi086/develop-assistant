@@ -1,100 +1,52 @@
 ---
 name: huabing-mini-vue2-cross-platform-ui
-description: 话饼跨端 UI 和组件技能。用于构建或修复 Vue 2 uni-app 的 hb-* 组件、页面局部组件、uv-ui 二次封装、自定义导航、按钮、弹窗、购物车浮层、swiper、vtabs、sticky、scroll 布局、rpx 样式和微信小程序/支付宝小程序/H5 兼容问题。若任务主要是购物车业务计算或订单状态，应配合点餐业务流 skill。
+description: 通用 UniApp + Vue 2 跨端 UI 与组件技能。用于页面局部组件、通用组件、自定义导航、按钮、swiper、scroll-view、sticky、列表滚动、尺寸测量、安全区、键盘、rpx/px 样式以及微信/支付宝/其他小程序/H5/App 兼容；不依赖特定组件前缀或 UI 库。
 ---
 
-# 话饼跨端 UI
+# UniApp Vue 2 跨端 UI
 
-## 快速入口
+## 先确认组件边界
 
-改跨端 UI、组件、滚动、弹窗、自定义导航或 uv-ui 封装前，先读这些文件：
+- 为页面和每个子组件写一句职责说明，标明 props、events、slot 和必要的命令式方法。
+- 页面负责请求、Store 和业务分支；组件负责展示、局部交互、测量与事件上报。
+- 页面私有组件放在目标项目既有的相邻目录；确认至少两个调用方后再升级为全局组件。
+- 组件名、文件名和自动导入前缀沿用目标项目规则，不假定任何固定业务前缀、easycom 或某个 UI 库存在。
 
-- `src/pages.json`
-- `src/components/hb-navbar/hb-navbar.vue`
-- `src/components/hb-button/hb-button.vue`
-- `src/components/hb-uv-swiper/hb-uv-swiper.vue`
-- `src/pagesA/shop/components/hb-uv-vtabs.vue`
-- 目标页面或目标组件的相邻组件
+## Vue 2 Options API
 
-当任务涉及组件族、已知平台差异、购物车弹层、订单确认组件或样式资源入口时，再读 `references/source-map.md`。
+- props 提供类型、默认值和必要校验；对象/数组默认值使用工厂函数。
+- 不直接修改 prop；需要编辑时建立本地草稿并通过事件提交。
+- 派生 class、style、过滤列表使用纯 computed；watcher 只做测量、请求等副作用。
+- `methods` 和生命周期不用箭头函数。防抖/节流函数按组件实例创建，并在 `beforeDestroy`/`onUnload` 取消。
+- props down / events up 为默认通信；ref 仅暴露 `open`、`close`、`focus`、`reset` 等最小命令式 API。
 
-## 任务边界
+## UniApp 模板与平台差异
 
-- 组件只处理展示、局部状态、props/events、测量和交互节流。
-- 价格、库存、购物车提交、支付、优惠、订单流转由父页面或 store 编排。
-- 修改 `hb-shopping-cart-*`、订单确认组件或详情页组件时，同时检查业务 skill 的状态约束。
-- 登录授权 UI 同时检查 `huabing-mini-vue2-auth-user-flow`；支付方式 UI 同时检查 `huabing-mini-vue2-payment-channel-flow`。
+- 优先使用跨端基础节点和目标 UI 库的公开 API，不把浏览器 DOM 标签直接带入小程序模板。
+- 平台差异使用条件编译，并把 workaround 收敛在适配器或基础组件内部。
+- selector query、swiper、scroll-view、open-type、slot 和事件返回结构在各平台可能不同；修改前读取目标项目已有分支。
+- 依赖异步渲染的测量放在 `$nextTick` 后，必要时等待数据与子组件都完成更新。
+- 系统 API 返回的 `px` 与设计稿 `rpx` 分开处理；不要混算单位或写死单一设备。
 
-## 基线规则
+## 布局与交互
 
-- 使用 Vue 2 Options API。
-- 模板使用 uni-app 基础节点：`view`、`text`、`image`、`scroll-view`、`swiper` 等。
-- 通用组件放 `src/components/hb-*`。
-- 页面私有组件放页面相邻 `components/`。
-- 业务决策放父页面，组件通过 props 和 emit 交互。
-- 复用已有 ref 方法命名：`popupShow`、`popupClose`、`showDialog`、`hideDialog`、`reset*`。
+- 自定义导航同时考虑状态栏、胶囊、横竖屏和安全区；返回动作由页面决定。
+- 滚动吸顶先测量并缓存 section 高度/top，内容变化后显式重算，不在滚动回调中反复查询节点。
+- 左右联动列表分别管理用户滚动与程序滚动，使用锁避免互相触发。
+- 长列表优先分页；只有确认性能瓶颈后再引入虚拟列表，并验证小程序端支持。
+- 提交按钮防重复逻辑使用 `huabing-mini-vue2-form-submit-flow`。
+- 中心弹窗和底部弹层分别使用 dialog/popup 技能，不在业务组件散落层级 hack。
 
-## 条件编译
+## 样式与资源
 
-平台差异使用条件编译块。微信和支付宝行为不同的地方，不要靠同一套模板硬撑。
-
-```html
-<!-- #ifdef MP-WEIXIN -->
-<!-- 微信小程序节点 -->
-<!-- #endif -->
-
-<!-- #ifdef MP-ALIPAY -->
-<!-- 支付宝小程序节点 -->
-<!-- #endif -->
-
-<!-- #ifdef H5 -->
-<!-- H5 节点 -->
-<!-- #endif -->
-```
-
-## 平台差异
-
-重点检查这些已知差异：
-
-- 支付宝 selector query 可能不支持 `.in(self)`，参考 `uniUtil.getBoundingClientRect` 的分支。
-- 支付宝自定义导航箭头颜色需要 `my.setNavigationBar` hack。
-- 部分 swiper 配置支付宝不支持，参考 `hb-uv-swiper` 的注释和降级。
-- 支付宝 `hb-uv-vtabs` slot 内 gap 可能不渲染；沿用组件 prop 在封装内部补 gap，不把平台 hack 散到业务列表。
-- 微信 `scroll-view` 中 slot 内容的 ID 可能无法稳定用于 `scroll-into-view`，必要时用 `scrollTop`。
-- 子组件渲染可能晚于 store 更新，依赖 ref 或测量时用 `this.$nextTick`。
-
-## 组件规则
-
-- 自定义导航用 `uni.getSystemInfoSync()` 和 `uni.getMenuButtonBoundingClientRect()` 计算状态栏、胶囊和内容宽度。
-- 页面使用自定义导航时，路由配置保持 `navigationStyle: 'custom'`。
-- 导航左侧点击向父级 emit `leftClick`，不要在组件里固定跳转。
-- 适配不同设备状态栏和胶囊高度，不写死 iPhone 或 Android 单一值。
-- 按钮的 H5、微信、支付宝 open-type 行为用不同模板。
-- 点击用 `util.debounce` 风格防抖。
-- 提交、支付、下单按钮使用内部 disabled 或 `isDisableAfterFirstClick` 防重复点击。
-- 失败路径由父页面调用 reset 方法恢复按钮状态。
-- 滚动和吸顶先测量 section 高度和 top，再在滚动中使用缓存结果。
-- 重计算布局要防抖。
-- 左侧菜单滚动和右侧内容滚动分开处理。
-- `sticky` 需要外层 wrapper 时，不要直接套在不生效的 `scroll-view` 内部。
-- 父页面需要切换全局滚动和内部滚动时，暴露类似 `updateRightContentScrollable` 的方法。
-- 弹窗组件只管理展示状态，业务分支交给父页面。
-- 使用语义事件，例如 `popupHandleClick`、`dialogRightCilck`、`handleBtnClick`。
-- 弹窗失败路径要恢复触发按钮或提交按钮状态。
-- 购物车、用餐方式、提交错误等弹窗层级复杂，改 z-index 前先查周边组件。
-
-## 样式
-
-- 小程序布局优先使用 rpx；系统测量得到 px 时再转换。
-- 静态图优先走 `config.defaultImg`，不要散落 OSS URL。
-- 保留项目 iconfont 体系，除非任务明确要求替换。
-- 文案、说明和项目文档中文优先；按钮、状态和业务文案按现有产品语言风格。
-- 避免影响现有 v1/v2 组件族。
-- 目标提交中的临时 class、调试文本和注释代码不是风格规范；只复用已经在当前源码保留的兼容方案。
+- 组件样式默认 scoped，使用 class 选择器；深度选择器只用于第三方组件且限制在根作用域下。
+- 颜色、间距、字号、圆角、z-index 和静态资源优先复用目标项目 token/config。
+- H5 检查滚动穿透、hover/focus 与键盘；小程序/App 检查安全区、原生组件层级和真机差异。
+- 图片提供加载失败与占位策略，不硬编码私有 CDN 地址。
 
 ## 验证
 
-- 含 `#ifdef` 的组件至少检查微信和支付宝分支。
-- 滚动、吸顶和 vtabs 改动要测短列表和长列表。
-- 自定义导航改动要测不同状态栏和胶囊高度。
-- 按钮改动要测成功、失败、取消三类路径的 disabled 恢复。
+- 至少验证需求涉及的平台分支，不用单个平台截图证明跨端正确。
+- 覆盖短/长内容、空数据、慢数据、重复点击、返回页面和组件销毁。
+- 检查 ref、事件名和 payload 与父页面完全一致，事件不会因组件嵌套而假定自动冒泡。
+- 检查不同状态栏、横竖屏、安全区、键盘弹出和滚动容器组合。

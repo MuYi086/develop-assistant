@@ -1,92 +1,61 @@
 ---
 name: huabing-mini-vue2-feature-scaffold
-description: 话饼 UniApp Vue 2 新需求脚手架技能。用于从一个新业务需求生成或补齐页面路由源、页面目录、同级 components、api_*.js、api/index.js 聚合、Vuex module、getters 和页面 onLoad dispatch demo；适用于用户说新建页面、新功能、新需求骨架、从 snippets 提炼开发流程、页面/API/store 一起创建等场景。
+description: 通用 UniApp + Vue 2 新功能脚手架工作流。用于从需求创建或补齐页面、页面私有组件、API/服务、Vuex 模块、路由/分包和最小验证；会先探测目标项目约定，不硬编码 pagesA、API barrel、Store 注册或生成脚本，也不会猜测接口路径。
 ---
 
-# 话饼新需求脚手架
+# UniApp Vue 2 新功能脚手架
 
-## 结论
+## 适配目标项目
 
-优先使用 skill，不把 snippets 直接迁移成一组固定 slash command。
+1. 先使用核心工作流读取仓库约束。
+2. 可运行 `node scripts/inspect-uniapp-vue2.mjs --project <项目目录> --pretty` 生成只读探测报告。
+3. 根据报告和相邻功能确认页面目录、组件命名、SFC 顺序、路由源、API 层、Store 注册及测试方式。
+4. 需要适配决策表时读取 `references/project-adaptation.md`。
 
-- skill 适合承载项目约束、文件读取顺序、跨端路由源、API/Vuex 数据流和示例代码生成。
-- slash command 只适合作为入口别名，例如“按话饼新需求脚手架创建 xxx”，不适合承载全部规则。
-- VS Code snippets 中的代码片段要转成“生成前检查 + 文件落点 + 数据流约束 + demo 模板”，不要原样搬运。
+探测脚本只提供候选，不替代阅读真实文件；未找到的约定必须通过源码确认，不凭经验补路径。
 
-## 使用顺序
+## 需求契约
 
-1. 先读项目边界：`AGENTS.md`、`.claude/constitution.md`、`src/pages.json`、`zxScript/basicPages.mjs`、目标分包相邻页面。
-2. 需要 API 或 Vuex 时，同时使用 `huabing-mini-vue2-request-store-flow`。
-3. 需要组件、样式、弹窗、滚动或自定义导航时，同时使用 `huabing-mini-vue2-cross-platform-ui`。
-4. 需求落在点餐、购物车、确认订单、支付或订单详情时，同时使用 `huabing-mini-vue2-ordering-business-flow`。
-5. 缺少关键信息时先补齐：页面路径、导航标题、分包 root、真实接口路径、登录/未登录接口是否成对、store 模块名、getter 名；不要生成虚构 endpoint。
+开始写文件前明确：
 
-## 脚手架产物
+- 用户场景、完成标准和失败/空态。
+- 页面路径、导航标题、主包或分包、登录要求和目标平台。
+- 真实 API method/path、请求与响应示例、错误语义。
+- 状态由页面还是 Vuex 持有，是否需要持久化。
+- 组件职责、props/events/slot，以及清理 timer/listener 的生命周期。
 
-新增一个普通业务页时，默认产出或维护：
+缺少真实 endpoint、业务枚举或关键交互时，不生成看似可用的虚构实现；先完成不依赖该信息的结构和明确待确认项。
 
-- `src/<root>/<page>/<page>.vue`
-- `src/<root>/<page>/components/<PascalName>Panel.vue`
-- `src/utils/api/api_<domain>.js`
-- `src/utils/api/index.js`
-- `src/store/modules/<domain>.js`
-- `src/store/getters.js`
-- `zxScript/basicPages.mjs`
-- H5 需要独立入口时再维护 `zxScript/basicPages.h5.mjs`
+## 组件地图
 
-不要直接把 `src/pages.json` 当源文件长期维护。它由 `zxScript/main.mjs` 生成；改完路由源后运行对应 `npm run zx:manifest:*` 生成。
+为非平凡页面先写简短组件地图：
 
-## 页面约定
+- route page：解析参数、生命周期、请求编排和页面级状态。
+- feature container：组织一个独立功能区。
+- presentational component：只接收 props、发出事件。
+- overlay/form/list：按对应专项技能维护草稿、提交、分页和关闭契约。
 
-- 使用 Vue 2 Options API。
-- 页面通过 `mapGetters` 读取 store 值。
-- `onLoad` 只处理入参和首屏请求编排。
-- 页面方法构造 `{ url, params, method }`，然后 `this.$store.dispatch('<module>/<action>', requestParams)`。
-- 页面不直接用 `util.postData` 存业务结果；接口返回值进入 Vuex，再通过 getter 消费。
-- `onUnload` 如需清理页面态，优先 dispatch store 的 `reset`。
-- 页面私有组件放同级 `components/`，通用组件再放 `src/components/hb-*`。
+页面存在三个以上独立 UI 区域或同时承担复杂请求与大段展示时拆分；小型单页不为形式制造组件。
 
-## Store 约定
+## 文件落点
 
-- 保持 `initState -> state -> mutations -> actions -> export default`。
-- action 内部调用 `util.postDataPromise(requestParams)`。
-- action 负责后端数据归一化并 commit。
-- mutation 使用 `SET_*` 命名。
-- getter 写入 `src/store/getters.js`，命名带领域前缀。
-- 只在确实需要跨启动保留时，才改 `config.vuexStorePath`。
+- 页面、私有组件和通用组件沿用目标项目目录及命名。
+- 路由只修改权威源；若 `pages.json` 是生成物，修改生成源并运行生成命令。
+- 仅在跨组件/跨页面共享时创建 Vuex 模块；否则保留页面局部状态。
+- API/服务沿用现有 client 和 error contract，不在页面直接复制 `uni.request`。
+- 自动注册、barrel、getter 汇总和持久化白名单仅在目标项目确有该机制时维护。
 
-## API 约定
+## 页面生命周期
 
-- `api_*.js` 只放接口路径常量。
-- `api/index.js` 继续手动 require 并展开到 `api` 对象，不恢复 `require.context`。
-- 登录/未登录接口若后端成对提供，显式维护两条常量。
-- 小程序端会在 `api/index.js` 拼接 `config.apiUrl`，不要在 API 常量里硬编码域名。
+- `onLoad`：解析和归一化 query，启动只需一次的首屏流程。
+- `onShow`：处理从选择页/WebView 返回后确需刷新的状态，使用明确标志避免重复请求。
+- `onPullDownRefresh` / `onReachBottom`：交给列表分页契约。
+- `onHide` / `onUnload`：按资源所有权停止 timer、socket、listener 和未完成请求，重置页面专属 Store。
 
-## 可复用资源
+## 实施与验证
 
-- `scripts/scaffold-feature.mjs`：生成页面、组件、API、store、getter 和路由源的 Node 脚本。先用 `--dry-run` 看计划，再正式写入。
-- `references/snippets-to-workflows.md`：把 `.vscode/uni.code-snippets` 的片段分类成 Agent 工作流。
-- `references/slash-command-template.md`：可选 slash command 入口模板，只作为触发 skill 的短 prompt。
-- `references/source-map.md`：脚手架规则对应的目标提交和当前源码证据。
-
-## 脚本示例
-
-```bash
-node generated-skills/huabing-mini-vue2-feature-scaffold/scripts/scaffold-feature.mjs \
-  --root pagesF \
-  --page demoFeature/demoFeature \
-  --title 示例页面 \
-  --domain demoFeature \
-  --endpoint wxminiappWxClientDemoFeatureDetail=/wxminiapp/wx/client/demoFeature/detail \
-  --dry-run
-```
-
-确认后去掉 `--dry-run`。如果 H5 也需要入口，加 `--h5`。
-
-## 验证
-
-- 路由源修改后运行对应 `npm run zx:manifest:<platform>:<env>`，确认 `src/pages.json` 被正确生成。
-- `.vue` 或样式变更后运行 `npm run lint:stylelint`。
-- 检查 `api/index.js` 中 require 和展开对象都已加入。
-- 检查 `src/store/getters.js` 中 getter 指向正确模块和字段。
-- 检查页面没有直接把接口返回散落存在 `data` 里。
+1. 先创建页面和组件契约，再接 API/Store，最后更新路由源。
+2. 每一步都保持应用可解析；不覆盖已存在文件，不做无关重构。
+3. 运行路由生成、lint、测试和至少一个目标平台构建。
+4. 验证首次进入、返回刷新、空数据、网络失败、重复点击和卸载清理。
+5. API/Store、UI、表单、列表、实时能力分别加载对应专项技能。

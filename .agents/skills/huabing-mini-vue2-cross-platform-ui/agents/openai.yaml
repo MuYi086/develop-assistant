@@ -1,4 +1,4 @@
 interface:
-  display_name: "话饼跨端 UI"
-  short_description: "维护话饼 hb 组件、uv-ui 封装、跨端导航、滚动、弹窗和样式兼容"
-  default_prompt: "Use $huabing-mini-vue2-cross-platform-ui 维护话饼小程序跨端 UI、hb 组件或滚动弹窗兼容问题。"
+  display_name: "UniApp Vue2 跨端 UI"
+  short_description: "构建组件、滚动导航和微信支付宝 H5/App 兼容界面"
+  default_prompt: "使用 $huabing-mini-vue2-cross-platform-ui 实现这个 UniApp Vue 2 跨端界面并验证平台差异。"

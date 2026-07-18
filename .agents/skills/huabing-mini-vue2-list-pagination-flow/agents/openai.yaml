@@ -1,0 +1,4 @@
+interface:
+  display_name: "UniApp Vue2 列表分页"
+  short_description: "实现多 tab 搜索、下拉刷新、上拉加载、请求去重和空错状态"
+  default_prompt: "使用 $huabing-mini-vue2-list-pagination-flow 实现这个 UniApp Vue 2 分页列表。"

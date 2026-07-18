@@ -1,0 +1,4 @@
+interface:
+  display_name: "UniApp Vue2 中心弹窗"
+  short_description: "实现确认提示、动态内容、事件契约、滚动锁和跨端弹窗清理"
+  default_prompt: "使用 $huabing-mini-vue2-dialog-flow 按目标项目组件约定实现这个中心弹窗。"

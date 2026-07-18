@@ -1,0 +1,4 @@
+interface:
+  display_name: "UniApp Vue2 定位发现流"
+  short_description: "处理位置权限、坐标转换、附近推荐、搜索缓存、隐私与拒绝降级"
+  default_prompt: "使用 $huabing-mini-vue2-location-discovery-flow 实现这个 UniApp Vue 2 定位与附近内容流程。"

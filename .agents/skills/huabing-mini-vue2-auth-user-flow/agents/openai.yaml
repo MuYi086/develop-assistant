@@ -1,4 +1,4 @@
 interface:
-  display_name: "话饼登录用户流"
-  short_description: "维护话饼微信与支付宝登录注册、隐私授权、令牌续签和用户状态"
-  default_prompt: "Use $huabing-mini-vue2-auth-user-flow 维护话饼小程序登录、注册、隐私授权、token 或用户状态流程。"
+  display_name: "UniApp Vue2 登录会话流"
+  short_description: "实现跨平台授权、会话刷新、未登录拦截、敏感数据保护和安全清理"
+  default_prompt: "使用 $huabing-mini-vue2-auth-user-flow 设计并实现这个 UniApp Vue 2 登录会话流程。"

@@ -135,8 +135,36 @@
       "source": ".agents/skills/huabing-mini-vue2-cross-platform-ui",
       "sourceType": "local"
     },
-    "huabing-mini-vue2-ordering-business-flow": {
-      "source": ".agents/skills/huabing-mini-vue2-ordering-business-flow",
+    "huabing-mini-vue2-dialog-flow": {
+      "source": ".agents/skills/huabing-mini-vue2-dialog-flow",
+      "sourceType": "local"
+    },
+    "huabing-mini-vue2-popup-flow": {
+      "source": ".agents/skills/huabing-mini-vue2-popup-flow",
+      "sourceType": "local"
+    },
+    "huabing-mini-vue2-location-discovery-flow": {
+      "source": ".agents/skills/huabing-mini-vue2-location-discovery-flow",
+      "sourceType": "local"
+    },
+    "huabing-mini-vue2-commerce-order-flow": {
+      "source": ".agents/skills/huabing-mini-vue2-commerce-order-flow",
+      "sourceType": "local"
+    },
+    "huabing-mini-vue2-realtime-lifecycle-flow": {
+      "source": ".agents/skills/huabing-mini-vue2-realtime-lifecycle-flow",
+      "sourceType": "local"
+    },
+    "huabing-mini-vue2-form-submit-flow": {
+      "source": ".agents/skills/huabing-mini-vue2-form-submit-flow",
+      "sourceType": "local"
+    },
+    "huabing-mini-vue2-list-pagination-flow": {
+      "source": ".agents/skills/huabing-mini-vue2-list-pagination-flow",
+      "sourceType": "local"
+    },
+    "huabing-mini-vue2-versioned-route-flow": {
+      "source": ".agents/skills/huabing-mini-vue2-versioned-route-flow",
       "sourceType": "local"
     },
     "huabing-mini-vue2-request-store-flow": {
@@ -147,20 +175,8 @@
       "source": ".agents/skills/huabing-mini-vue2-feature-scaffold",
       "sourceType": "local"
     },
-    "huabing-mini-vue2-hb-dialog-flow": {
-      "source": ".agents/skills/huabing-mini-vue2-hb-dialog-flow",
-      "sourceType": "local"
-    },
-    "huabing-mini-vue2-uv-popup-flow": {
-      "source": ".agents/skills/huabing-mini-vue2-uv-popup-flow",
-      "sourceType": "local"
-    },
     "huabing-mini-vue2-auth-user-flow": {
       "source": ".agents/skills/huabing-mini-vue2-auth-user-flow",
-      "sourceType": "local"
-    },
-    "huabing-mini-vue2-home-shop-location-flow": {
-      "source": ".agents/skills/huabing-mini-vue2-home-shop-location-flow",
       "sourceType": "local"
     },
     "huabing-mini-vue2-marketing-member-flow": {
