@@ -1,0 +1,4 @@
+interface:
+  display_name: "话饼 Vue3 小程序应用壳层"
+  short_description: "适配 Vue 3 uni-app 的页面路由、插件壳层与多端构建流程"
+  default_prompt: "Use $huabing-mini-vue3-app-shell 维护当前 Vue 3 uni-app 项目的页面注册、路由、插件或跨端构建。"

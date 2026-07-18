@@ -1,0 +1,4 @@
+interface:
+  display_name: "话饼 Vue3 小程序首页看板"
+  short_description: "适配 Vue 3 uni-app 首页看板的数据编排、权限控制与刷新流程"
+  default_prompt: "Use $huabing-mini-vue3-home-dashboard 实现或维护当前 Vue 3 uni-app 项目的首页看板。"

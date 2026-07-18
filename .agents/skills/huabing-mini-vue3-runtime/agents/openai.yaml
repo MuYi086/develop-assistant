@@ -1,0 +1,4 @@
+interface:
+  display_name: "话饼 Vue3 小程序运行时"
+  short_description: "适配 Vue 3 uni-app 的认证请求、状态持久化与 WebView 运行时"
+  default_prompt: "Use $huabing-mini-vue3-runtime 排查当前 Vue 3 uni-app 项目的登录、请求、持久化或 WebView 问题。"
