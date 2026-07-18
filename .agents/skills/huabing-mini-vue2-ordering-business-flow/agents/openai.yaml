@@ -1,4 +1,4 @@
 interface:
   display_name: "话饼点餐业务流"
-  short_description: "维护点餐、购物车、确认订单和烹饪流程"
-  default_prompt: "Use $huabing-mini-vue2-ordering-business-flow 维护话饼小程序点餐、购物车、支付、订单详情或烹饪业务流。"
+  short_description: "维护话饼点餐、购物车、确认订单、公共详情、取餐和烹饪流程"
+  default_prompt: "Use $huabing-mini-vue2-ordering-business-flow 维护话饼小程序点餐、购物车、确认订单、公共详情或烹饪业务流。"

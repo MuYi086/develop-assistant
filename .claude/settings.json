@@ -155,6 +155,26 @@
       "source": ".agents/skills/huabing-mini-vue2-uv-popup-flow",
       "sourceType": "local"
     },
+    "huabing-mini-vue2-auth-user-flow": {
+      "source": ".agents/skills/huabing-mini-vue2-auth-user-flow",
+      "sourceType": "local"
+    },
+    "huabing-mini-vue2-home-shop-location-flow": {
+      "source": ".agents/skills/huabing-mini-vue2-home-shop-location-flow",
+      "sourceType": "local"
+    },
+    "huabing-mini-vue2-marketing-member-flow": {
+      "source": ".agents/skills/huabing-mini-vue2-marketing-member-flow",
+      "sourceType": "local"
+    },
+    "huabing-mini-vue2-order-after-sales-flow": {
+      "source": ".agents/skills/huabing-mini-vue2-order-after-sales-flow",
+      "sourceType": "local"
+    },
+    "huabing-mini-vue2-payment-channel-flow": {
+      "source": ".agents/skills/huabing-mini-vue2-payment-channel-flow",
+      "sourceType": "local"
+    },
     "huabing-mini-vue3-app-shell": {
       "source": ".agents/skills/huabing-mini-vue3-app-shell",
       "sourceType": "local"

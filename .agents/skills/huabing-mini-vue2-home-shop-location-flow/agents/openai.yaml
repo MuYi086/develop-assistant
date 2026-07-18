@@ -1,0 +1,4 @@
+interface:
+  display_name: "话饼首页门店定位流"
+  short_description: "维护话饼首页初始化、定位授权、门店推荐、选择、搜索和降级流程"
+  default_prompt: "Use $huabing-mini-vue2-home-shop-location-flow 维护话饼小程序首页初始化、定位、推荐门店或门店选择流程。"

@@ -23,6 +23,7 @@ description: 话饼跨端 UI 和组件技能。用于构建或修复 Vue 2 uni-a
 - 组件只处理展示、局部状态、props/events、测量和交互节流。
 - 价格、库存、购物车提交、支付、优惠、订单流转由父页面或 store 编排。
 - 修改 `hb-shopping-cart-*`、订单确认组件或详情页组件时，同时检查业务 skill 的状态约束。
+- 登录授权 UI 同时检查 `huabing-mini-vue2-auth-user-flow`；支付方式 UI 同时检查 `huabing-mini-vue2-payment-channel-flow`。
 
 ## 基线规则
 
@@ -58,6 +59,7 @@ description: 话饼跨端 UI 和组件技能。用于构建或修复 Vue 2 uni-a
 - 支付宝 selector query 可能不支持 `.in(self)`，参考 `uniUtil.getBoundingClientRect` 的分支。
 - 支付宝自定义导航箭头颜色需要 `my.setNavigationBar` hack。
 - 部分 swiper 配置支付宝不支持，参考 `hb-uv-swiper` 的注释和降级。
+- 支付宝 `hb-uv-vtabs` slot 内 gap 可能不渲染；沿用组件 prop 在封装内部补 gap，不把平台 hack 散到业务列表。
 - 微信 `scroll-view` 中 slot 内容的 ID 可能无法稳定用于 `scroll-into-view`，必要时用 `scrollTop`。
 - 子组件渲染可能晚于 store 更新，依赖 ref 或测量时用 `this.$nextTick`。
 
@@ -88,6 +90,7 @@ description: 话饼跨端 UI 和组件技能。用于构建或修复 Vue 2 uni-a
 - 保留项目 iconfont 体系，除非任务明确要求替换。
 - 文案、说明和项目文档中文优先；按钮、状态和业务文案按现有产品语言风格。
 - 避免影响现有 v1/v2 组件族。
+- 目标提交中的临时 class、调试文本和注释代码不是风格规范；只复用已经在当前源码保留的兼容方案。
 
 ## 验证
 

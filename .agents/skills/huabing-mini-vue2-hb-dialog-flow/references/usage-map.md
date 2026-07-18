@@ -1,6 +1,14 @@
 # hb-dialog 使用地图
 
-基准：2026-06-08，在 `src` 下用 `rg -l "<hb-dialog" src` 检索到 78 个文件。
+基准：2026-07-18，在 `src` 下用 `rg -l "<hb-dialog" src --glob "*.vue"` 检索到 85 个使用文件（不含基础组件自身）。
+
+## 目录
+
+- 基础组件与全局封装
+- 页面私有 dialog 族
+- 常见代码模式
+- 目标提交证据
+- 复查命令
 
 ## 基础组件
 
@@ -39,6 +47,7 @@
 - `src/pages/home/components/dialog-shop-enterprise.vue`
 - `src/pages/home/components/dialog-invite-next.vue`
 - `src/pages/home/components/dialog-open-screen-popup.vue`
+- `src/pages/home/home.vue` 使用隐私和首页业务 dialog。
 - `src/pages/mine/components/dialog-goods-safety-intro.vue`
 - `src/pages/orderList/components/dialog-order-list-not-pay-cancel.vue`
 - `src/pages/orderList/components/dialog-order-list-cancel.vue`
@@ -78,6 +87,7 @@
 - `src/pagesD/singleGoodsCook/singleGoodsCook.vue` 使用等待烹饪列表错误 dialog。
 - `src/pagesD/noodlesGoodsCook/noodlesGoodsCook.vue` 使用等待烹饪列表错误 dialog。
 - `src/pagesD/comboCook/comboCook.vue` 使用等待烹饪列表错误 dialog。
+- `src/pagesD/cookV3/cookV3.vue` 内联使用确认和异常提示 dialog。
 
 ### orderConfirm
 
@@ -98,6 +108,12 @@
 - 售罄和验证次数类错误 dialog 使用 `init(message, ids)` 和 `updateDialogTipName`。
 
 ### detail/cancel/pay
+
+- `src/pagesF/commonOrderDetail/components/dialog-show-qr.vue`
+- `src/pagesF/commonOrderDetail/components/dialog-show-door-number.vue`
+- `src/pagesF/commonOrderDetail/components/dialog-no-door-number.vue`
+- `src/pagesF/commonOrderDetail/components/dialog-open-screen.vue`
+- `src/pagesF/commonOrderDetail/components/dialog-cancel-order.vue`
 
 - `src/pagesF/singleGoodsDetailV2/components/dialog-show-qr.vue`
 - `src/pagesF/singleGoodsDetailV2/components/dialog-show-door-number.vue`
@@ -123,6 +139,7 @@
 - `src/pagesF/orderCancel/components/dialog-order-cancel-rule.vue`
 - `src/pagesF/orderCancel/components/dialog-order-cancel-refresh.vue`
 - `src/pagesG/walletPayResult/components/dialog-cancel-pay.vue`
+- `src/pagesG/shiHuanMealCardPayResult/components/dialog-cancel-pay.vue`
 - `src/pagesE/couponExchange/components/dialog-coupon-exchange-success.vue`
 - `src/pagesE/couponExchange/components/dialog-card-password-exchange-success.vue`
 - `src/pagesI/shopResponsibilityCancel/components/dialog-cancel-rule.vue`
@@ -134,6 +151,15 @@
 - `dialogLeftClick () { this.hideDialog(); this.$emit('dialogLeftClick', null) }`
 - `dialogRightClick () { this.hideDialog(); this.$emit('dialogRightClick', null) }`
 - 旧文件可能使用 `dialogLeftCilck`、`dialogRightCilck`，要按父页面引用保持一致。
+
+## 目标提交证据
+
+筛选口径：committer 为 `ougege` 或 `muyi086`，且邮箱为 `1258947325@qq.com`。
+
+- `8191dceb5`（2026-07-10）：新增“无可取餐格”页面私有 dialog，并由父页面控制状态。
+- `b009aba46`（2026-07-17）：在 `modify` dialog 内局部调整继续取餐按钮结构和间距。
+- `e0eb65285`（2025-09-06）：登录授权组件按平台返回形态做小范围兼容。
+- `bed5733db`（2025-08-11，muyi086）：调整一代机确认订单 dialog 按钮样式。
 
 ## 复查命令
 

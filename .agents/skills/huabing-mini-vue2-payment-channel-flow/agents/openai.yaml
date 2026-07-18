@@ -1,0 +1,4 @@
+interface:
+  display_name: "话饼支付渠道流"
+  short_description: "维护话饼原生支付、钱包、世环餐卡、渠道分发和支付结果轮询流程"
+  default_prompt: "Use $huabing-mini-vue2-payment-channel-flow 维护话饼小程序原生支付、钱包、世环餐卡或支付结果轮询流程。"

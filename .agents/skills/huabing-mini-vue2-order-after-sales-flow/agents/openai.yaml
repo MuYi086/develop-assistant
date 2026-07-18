@@ -1,0 +1,4 @@
+interface:
+  display_name: "话饼订单售后流"
+  short_description: "维护话饼订单取消、异常餐退款、商责取消、联合单和售后结果流程"
+  default_prompt: "Use $huabing-mini-vue2-order-after-sales-flow 维护话饼小程序订单取消、异常餐退款或商责取消流程。"

@@ -1,4 +1,4 @@
 interface:
   display_name: "话饼核心工作流"
-  short_description: "维护路由、生成配置和架构边界"
+  short_description: "维护话饼项目路由、分包、manifest/env 生成配置和架构边界"
   default_prompt: "Use $huabing-mini-vue2-core-workflow 维护话饼小程序路由、manifest/env 生成配置、分包或跨模块架构边界。"

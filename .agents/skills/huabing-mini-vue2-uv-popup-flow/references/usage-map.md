@@ -1,6 +1,6 @@
 # uv-popup 使用地图
 
-基准：2026-06-08，在 `src` 下用 `rg -l "<uv-popup" src` 检索到 32 个文件。
+基准：2026-07-18，在 `src` 下用 `rg -l "<uv-popup" src --glob "*.vue"` 检索到 33 个文件。
 
 ## 核心模式
 
@@ -57,12 +57,14 @@
 - `src/pagesD/singleGoodsCook/components/popup-choose-cooktime.vue`
 - `src/pagesD/noodlesGoodsCook/components/popup-choose-cooktime.vue`
 - `src/pagesD/comboCook/components/popup-choose-cooktime.vue`
+- `src/pagesD/cookV3/components/hb-cook-confirm-guide-popup/hb-cook-confirm-guide-popup.vue`
 
 要点：
 
 - 预约烹饪弹层打开前自动回显 day/time，并在选择时间后 emit `handleChange`。
 - 引导弹层会在 `mounted` 中自动 `popupShow`，点击确认只更新次数状态。
 - 烹饪相关弹层关闭、确认和状态重置必须配合 cook store。
+- V3 确认引导弹层使用页面局部 `hb-*` 目录，修改时同时检查 cookV3 状态和遮罩关闭策略。
 
 ## 商品详情和订单详情
 
@@ -89,3 +91,12 @@
 rg -n "<uv-popup|popupShow|popupClose|popConfig1|uvPopupConfig|popupChange|popChange|maskClick" src --glob "*.vue"
 rg -n "zIndex:|closeOnClickOverlay|customStyle" src --glob "*.vue"
 ```
+
+## 目标提交证据
+
+筛选口径：committer 为 `ougege` 或 `muyi086`，且邮箱为 `1258947325@qq.com`。
+
+- `f7a3729c5`（2025-09-15）：新增支付方式选择 popup、item 和 prepare/正式选择态。
+- `cbcc352c7`（2025-08-04，muyi086）：调整确认订单用餐方式和时间弹层交互。
+- `1ee10f40a`（2025-08-05，muyi086）：处理支付宝 vtabs slot 渲染差异。
+- `29ab08ff2`（2026-07-07）：V3 烹饪流程联调并使用局部引导 popup。

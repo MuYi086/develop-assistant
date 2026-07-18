@@ -14,6 +14,7 @@ description: 话饼 UniApp Vue 2 的 hb-dialog 弹窗技能。用于新建或修
 - 需要复用全局封装时读取 `src/components/hb-dialog-*`
 - 需要现有案例地图时读取 `references/usage-map.md`
 - 涉及点餐、订单、支付、取餐和烹饪时，同时读取 `huabing-mini-vue2-ordering-business-flow`
+- 涉及支付结果时读取 `huabing-mini-vue2-payment-channel-flow`；涉及取消退款时读取 `huabing-mini-vue2-order-after-sales-flow`
 
 ## 落点判断
 
@@ -126,3 +127,4 @@ methods: {
 - 检查关闭图标、遮罩层滚动锁定、H5 body overflow 恢复。
 - 检查 slot 内容在微信、支付宝和 H5 下不溢出、不遮挡按钮。
 - 修改全局 `hb-dialog-*` 时，搜索全部引用页，避免影响旧流程。
+- 使用地图统计会随业务增长而变化；执行任务时用末尾复查命令重新确认，不把数量当作固定契约。

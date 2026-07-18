@@ -14,6 +14,8 @@
 - 运行时配置和持久化白名单：`src/utils/config.js`
 - Storage 包装：`src/utils/storage.js`
 
+当前基准（2026-07-18）：48 个 `api_*.js` 模块、52 个 Vuex module。
+
 ## 代表性模块
 
 - 点餐：`src/store/modules/shop.js`
@@ -46,3 +48,15 @@
 - `interceptRequest.js` 同时承担 inner 本地 mock 和失败请求上报，改请求结构时要确认日志仍能上传。
 - 新增跨组件状态时同步 `src/store/getters.js`；只有必须跨重启保留的数据才加入 `config.vuexStorePath`。
 - 持久化大对象会增加小程序 storage 风险，优先使用 `src/store/index.js` 的 reducer 思路保留必要字段。
+
+## 目标提交证据
+
+筛选口径：committer 为 `ougege` 或 `muyi086`，且邮箱为 `1258947325@qq.com`。
+
+- `1e59011b5`（2024-07-03）：抽取并统一 `storeModuleReset`。
+- `5ee5b6a3b`（2024-08-13）：支付宝请求头增加 `clientId`。
+- `4e67a3a6e`（2024-09-12）：补充 token 检查与续签。
+- `88d982f03`（2026-01-15）：修复 `authHttp` 并补参数、header 处理。
+- `2da718649`（2026-04-02）：在 Store 归一化阶段限制持久化列表大小。
+- `e7f26f049`（2026-06-23）：新增公共详情 API、Store、getter 的完整链路。
+- `b1cf95c87`（2026-07-09）：把跨入口取消请求下沉公共 util 并保持 Store action 请求链。

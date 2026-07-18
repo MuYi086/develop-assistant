@@ -18,11 +18,13 @@ const storeModule = toCamel(args.store || domain)
 const apiModule = normalizeApiModule(args.apiModule || args['api-module'] || `api_${toSnake(domain)}`)
 const includeH5 = Boolean(args.h5 || args['include-h5'])
 const dryRun = Boolean(args.dryRun || args['dry-run'])
-const endpoints = normalizeEndpoints(args.endpoint, domain)
+const endpoints = normalizeEndpoints(args.endpoint)
 
 if (!page) {
   fail('缺少 --page，例如 --page demoFeature/demoFeature')
 }
+
+validateInputs({ root, page, title, storeModule, apiModule, endpoints })
 
 const names = buildNames({ root, page, domain, storeModule, apiModule, title, endpoints })
 const writes = []
@@ -100,28 +102,45 @@ function normalizeApiModule(value) {
   return trimSlash(value).replace(/\.js$/, '')
 }
 
-function normalizeEndpoints(value, domainValue) {
+function normalizeEndpoints(value) {
   const list = Array.isArray(value) ? value : value ? [value] : []
   const parsed = list.flatMap(item => String(item).split(',')).map(item => item.trim()).filter(Boolean).map(item => {
     const index = item.indexOf('=')
-    if (index === -1) {
-      return {
-        name: item,
-        path: `/wxminiapp/wx/client/${toCamel(domainValue)}/query`
-      }
-    }
+    if (index === -1) fail(`--endpoint 格式错误：${item}，应为 name=/path`)
     return {
       name: item.slice(0, index).trim(),
       path: item.slice(index + 1).trim()
     }
   })
 
-  if (parsed.length > 0) return parsed
+  if (parsed.length === 0) fail('缺少 --endpoint；必须提供真实接口常量和路径，不生成占位 endpoint')
+  return parsed
+}
 
-  return [{
-    name: `${toCamel(domainValue)}Query`,
-    path: `/wxminiapp/wx/client/${toCamel(domainValue)}/query`
-  }]
+function validateInputs(input) {
+  if (!/^pages[A-Za-z0-9_-]*$/.test(input.root)) {
+    fail(`--root 不合法：${input.root}`)
+  }
+  if (!/^[A-Za-z0-9_-]+(?:\/[A-Za-z0-9_-]+)*$/.test(input.page) || input.page.includes('..')) {
+    fail(`--page 不合法：${input.page}`)
+  }
+  if (!/^[A-Za-z_$][A-Za-z0-9_$]*$/.test(input.storeModule)) {
+    fail(`--store 不是合法 JavaScript 标识符：${input.storeModule}`)
+  }
+  if (!/^api_[A-Za-z0-9_]+$/.test(input.apiModule)) {
+    fail(`--api-module 不合法：${input.apiModule}`)
+  }
+  if (/['\r\n]/.test(input.title)) {
+    fail('--title 不能包含单引号或换行')
+  }
+  input.endpoints.forEach(endpoint => {
+    if (!/^[A-Za-z_$][A-Za-z0-9_$]*$/.test(endpoint.name)) {
+      fail(`endpoint 常量名不合法：${endpoint.name}`)
+    }
+    if (!endpoint.path.startsWith('/') || /['\r\n]/.test(endpoint.path)) {
+      fail(`endpoint 路径不合法：${endpoint.path}`)
+    }
+  })
 }
 
 function inferDomain(pagePath) {
@@ -315,8 +334,8 @@ const actions = {
       })
     })
   },
-  reset () {
-    return util.storeModuleReset(state, initState)
+  reset ({ commit }) {
+    return util.storeModuleReset(state, initState, commit, mutations)
   },
   recover ({ commit }, recoverState) {
     return util.storeModuleReset(state, recoverState)
@@ -357,7 +376,11 @@ function insertGetter(text, names) {
   const marker = '\n}\nexport default getters'
   const index = text.indexOf(marker)
   if (index === -1) fail('src/store/getters.js 未找到 getters 结尾')
-  return `${text.slice(0, index)}${getterLine}\n${text.slice(index)}`
+  let prefix = text.slice(0, index)
+  if (!prefix.trimEnd().endsWith(',')) {
+    prefix = `${prefix},`
+  }
+  return `${prefix}\n${getterLine}${text.slice(index)}`
 }
 
 function insertMiniRoute(text, names) {
@@ -430,13 +453,14 @@ function stageUpdate(filePath, updater) {
 
 async function applyOperations() {
   const plan = []
+  const preparedWrites = []
+  const preparedUpdates = []
+
   for (const item of writes) {
     const absolute = path.resolve(cwd, item.filePath)
-    plan.push(`CREATE ${item.filePath}`)
-    if (dryRun) continue
     await assertMissing(absolute)
-    await fs.mkdir(path.dirname(absolute), { recursive: true })
-    await fs.writeFile(absolute, item.content, 'utf8')
+    preparedWrites.push({ ...item, absolute })
+    plan.push(`CREATE ${item.filePath}`)
   }
 
   for (const item of updates) {
@@ -448,10 +472,22 @@ async function applyOperations() {
       continue
     }
     plan.push(`UPDATE ${item.filePath}`)
-    if (!dryRun) await fs.writeFile(absolute, next, 'utf8')
+    preparedUpdates.push({ absolute, next })
   }
 
   console.log(plan.join('\n'))
+  if (dryRun) {
+    console.log('\nDry run 完成，未写入文件。')
+    return
+  }
+
+  for (const item of preparedWrites) {
+    await fs.mkdir(path.dirname(item.absolute), { recursive: true })
+    await fs.writeFile(item.absolute, item.content, 'utf8')
+  }
+  for (const item of preparedUpdates) {
+    await fs.writeFile(item.absolute, item.next, 'utf8')
+  }
   console.log('\n完成后运行对应 npm run zx:manifest:<platform>:<env> 生成 src/pages.json。')
 }
 

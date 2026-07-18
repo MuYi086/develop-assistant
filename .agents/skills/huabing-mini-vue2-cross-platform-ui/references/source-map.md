@@ -14,6 +14,8 @@
 - 图片和静态资源配置：`src/utils/config.js`
 - 常用工具：`src/utils/util.js`、`src/utils/common/uniUtil.js`
 
+当前基准（2026-07-18）：`src/components/` 下有 44 个 `hb-*` 目录。
+
 ## 组件族
 
 - `hb-dialog-*`：取消订单、隐私、温馨提示、提交错误等弹窗。
@@ -36,3 +38,14 @@
 - 静态图优先走 `config.defaultImg` 或既有配置，不在组件里散落 OSS URL。
 - 微信、支付宝和 H5 的 open-type、selector query、swiper、scroll-view 行为可能不同，改动后至少检查相关平台分支。
 - 弹窗层级和购物车浮层耦合较多，调整 z-index 前先查周边组件。
+
+## 目标提交证据
+
+筛选口径：committer 为 `ougege` 或 `muyi086`，且邮箱为 `1258947325@qq.com`。
+
+- `1ee10f40a`（2025-08-05，muyi086）：支付宝 `hb-uv-vtabs` slot gap 兼容。
+- `63f9fd2ba`（2025-08-04，muyi086）：统一 uv-button 点击阻止冒泡行为。
+- `6c2ba5362`（2025-08-05，muyi086）：把小程序模板中的 `span` 批量替换为 `text`。
+- `e10fb17b0`（2025-09-24，ougege）：封装支付宝自定义导航左箭头差异。
+- `2cb1f7353`（2026-03-19，ougege）：修复支付宝自定义导航样式。
+- `b009aba46`（2026-07-17，ougege）：在既有 dialog 结构内局部调整取餐柜弹窗样式。

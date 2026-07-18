@@ -20,7 +20,7 @@ const mutations = {
 }
 
 const actions = {
-  doGetDomainValue({ commit }, requestParams) {
+  doGetDomainValue ({ commit }, requestParams) {
     return new Promise((resolve, reject) => {
       util.postDataPromise(requestParams).then(res => {
         commit('SET_DOMAINVALUE', res.data)
@@ -29,6 +29,12 @@ const actions = {
         reject(err)
       })
     })
+  },
+  reset ({ commit }) {
+    return util.storeModuleReset(state, initState, commit, mutations)
+  },
+  recover ({ commit }, recoverState) {
+    return util.storeModuleReset(state, recoverState)
   }
 }
 

@@ -1,4 +1,4 @@
 interface:
   display_name: "话饼新需求脚手架"
-  short_description: "生成页面、API、Vuex 和路由骨架"
+  short_description: "生成话饼 Vue2 页面、局部组件、API、Vuex、getter 和路由源骨架"
   default_prompt: "Use $huabing-mini-vue2-feature-scaffold 为话饼小程序新需求创建页面、同级组件、API、Vuex、getter 和路由源骨架。"
